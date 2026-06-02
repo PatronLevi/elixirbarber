@@ -92,23 +92,15 @@ export default function Products() {
 
         {/* Layout: Showcase on left, Products list on right */}
         <div
+          id="products-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(12, 1fr)',
-            gap: 'clamp(1.5rem, 4vw, 3rem)',
             alignItems: 'start',
           }}
         >
           {/* Left: Showcase Image */}
           <div
             className="reveal"
-            style={{
-              gridColumn: 'span 12',
-              gridColumnStart: 1,
-              '@media (min-width: 992px)': {
-                gridColumn: 'span 5',
-              },
-            }}
             id="product-showcase-container"
           >
             <div
@@ -157,10 +149,6 @@ export default function Products() {
           {/* Right: Products List */}
           <div
             style={{
-              gridColumn: 'span 12',
-              '@media (min-width: 992px)': {
-                gridColumn: 'span 7',
-              },
               display: 'flex',
               flexDirection: 'column',
               gap: '1.25rem',
@@ -273,12 +261,32 @@ export default function Products() {
 
         {/* Global responsive styles overlay */}
         <style>{`
+          #products-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+          #product-showcase-container {
+            grid-column: span 12;
+            width: 100%;
+            max-width: 420px;
+            margin-inline: auto;
+          }
+          #products-list-container {
+            grid-column: span 12;
+            width: 100%;
+          }
           @media (min-width: 992px) {
+            #products-grid {
+              grid-template-columns: repeat(12, 1fr);
+              gap: clamp(1.5rem, 4vw, 3rem);
+            }
             #product-showcase-container {
-              grid-column: span 5 !important;
+              grid-column: span 5;
+              max-width: none;
+              margin-inline: 0;
             }
             #products-list-container {
-              grid-column: span 7 !important;
+              grid-column: span 7;
             }
           }
         `}</style>
