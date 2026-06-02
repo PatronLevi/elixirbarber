@@ -74,7 +74,7 @@ export default function Products() {
       id="productos"
       ref={sectionRef}
       style={{
-        background: 'var(--beige-deep)',
+        background: 'var(--beige)',
         padding: 'clamp(5rem, 10vw, 8rem) 0',
       }}
       aria-label="Productos Elixir Barber"

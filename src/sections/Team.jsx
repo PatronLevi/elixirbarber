@@ -203,7 +203,7 @@ export default function Team() {
       id="equipo"
       ref={sectionRef}
       style={{
-        background: 'var(--beige-deep)',
+        background: 'var(--beige)',
         padding: 'clamp(5rem, 10vw, 8rem) 0',
       }}
       aria-label="Nuestro equipo de barberos"

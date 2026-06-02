@@ -486,13 +486,13 @@ function InfiniteCarousel() {
       {/* Fade left */}
       <div aria-hidden="true" style={{
         position: 'absolute', left: 0, top: 0, bottom: 0, width: '72px',
-        background: 'linear-gradient(to right, var(--beige-deep), transparent)',
+        background: 'linear-gradient(to right, var(--beige), transparent)',
         zIndex: 2, pointerEvents: 'none',
       }} />
       {/* Fade right */}
       <div aria-hidden="true" style={{
         position: 'absolute', right: 0, top: 0, bottom: 0, width: '72px',
-        background: 'linear-gradient(to left, var(--beige-deep), transparent)',
+        background: 'linear-gradient(to left, var(--beige), transparent)',
         zIndex: 2, pointerEvents: 'none',
       }} />
 
@@ -555,7 +555,7 @@ export default function Reviews() {
       id="opiniones"
       ref={sectionRef}
       style={{
-        background: 'var(--beige-deep)',
+        background: 'var(--beige)',
         padding: 'clamp(5rem, 10vw, 8rem) 0 clamp(3rem, 6vw, 5rem)',
         overflow: 'hidden',
       }}

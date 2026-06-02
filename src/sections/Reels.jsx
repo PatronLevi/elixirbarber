@@ -199,7 +199,7 @@ export default function Reels() {
       id="reels"
       ref={sectionRef}
       style={{
-        background: 'var(--beige-deep)',
+        background: 'var(--beige)',
         padding: 'clamp(5rem, 10vw, 8rem) 0',
         borderTop: '1px solid rgba(120, 110, 80, 0.1)',
         position: 'relative',
