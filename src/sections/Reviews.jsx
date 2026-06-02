@@ -341,21 +341,39 @@ function ReviewCard({ review }) {
 /* ── Infinite Draggable Carousel ─────────────────────────── */
 function InfiniteCarousel() {
   const containerRef = useRef(null)
-  const rafRef       = useRef(null)
   const isDragging   = useRef(false)
   const startX       = useRef(0)
   const lastScrollX  = useRef(0)
   const velocity     = useRef(0)
   const lastClientX  = useRef(0)
 
-  const isAutoScrolling = useRef(false)
-  const userActive      = useRef(false)
-  const scrollTimeoutRef = useRef(null)
-  const scrollPosRef    = useRef(0)
+  const autoPlayTimerRef = useRef(null)
 
   // Triplicar para loop suave
   const cards = [...REVIEWS, ...REVIEWS, ...REVIEWS]
   const setWidth = CARD_STRIDE * REVIEWS.length   // ancho de un ciclo
+
+  const startAutoPlay = () => {
+    stopAutoPlay()
+    autoPlayTimerRef.current = setInterval(() => {
+      const el = containerRef.current
+      if (!el || isDragging.current) return
+      
+      const currentScroll = el.scrollLeft
+      const currentIndex = Math.round(currentScroll / CARD_STRIDE)
+      const nextIndex = currentIndex + 1
+
+      el.style.scrollBehavior = 'smooth'
+      el.scrollLeft = nextIndex * CARD_STRIDE
+    }, 5000)
+  }
+
+  const stopAutoPlay = () => {
+    if (autoPlayTimerRef.current) {
+      clearInterval(autoPlayTimerRef.current)
+      autoPlayTimerRef.current = null
+    }
+  }
 
   useEffect(() => {
     const el = containerRef.current
@@ -363,107 +381,104 @@ function InfiniteCarousel() {
 
     // Empezar en el segundo tercio para poder ir en ambas direcciones
     el.scrollLeft = setWidth
-    scrollPosRef.current = setWidth
-
-    const tick = () => {
-      if (!isDragging.current && !userActive.current) {
-        scrollPosRef.current += SCROLL_SPEED
-        isAutoScrolling.current = true
-        el.scrollLeft = Math.round(scrollPosRef.current)
-        isAutoScrolling.current = false
-      }
-      rafRef.current = requestAnimationFrame(tick)
-    }
-
-    rafRef.current = requestAnimationFrame(tick)
 
     const handleScroll = () => {
-      // Si el scroll ocurre sin que sea auto-scroll, es interacción del usuario
-      if (!isAutoScrolling.current) {
-        scrollPosRef.current = el.scrollLeft
-        userActive.current = true
-        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
-        scrollTimeoutRef.current = setTimeout(() => {
-          userActive.current = false
-        }, 800) // reanudar auto-scroll tras 800ms de inactividad de scroll externo
-      }
-
-      // Loop infinito instantáneo
+      // Loop infinito instantáneo si se sale del ciclo central
       if (el.scrollLeft >= setWidth * 2) {
-        const offset = el.scrollLeft - setWidth * 2
-        isAutoScrolling.current = true
-        el.scrollLeft = setWidth + offset
-        scrollPosRef.current = setWidth + offset
-        isAutoScrolling.current = false
-      } else if (el.scrollLeft <= 0) {
-        const offset = el.scrollLeft
-        isAutoScrolling.current = true
-        el.scrollLeft = setWidth + offset
-        scrollPosRef.current = setWidth + offset
-        isAutoScrolling.current = false
+        const prevBehavior = el.style.scrollBehavior
+        el.style.scrollBehavior = 'auto'
+        el.scrollLeft -= setWidth
+        void el.offsetWidth // Forzar reflujo
+        el.style.scrollBehavior = prevBehavior
+      } else if (el.scrollLeft < setWidth) {
+        const prevBehavior = el.style.scrollBehavior
+        el.style.scrollBehavior = 'auto'
+        el.scrollLeft += setWidth
+        void el.offsetWidth // Forzar reflujo
+        el.style.scrollBehavior = prevBehavior
       }
     }
 
     el.addEventListener('scroll', handleScroll, { passive: true })
+    
+    // Iniciar auto-play
+    startAutoPlay()
 
     return () => {
-      cancelAnimationFrame(rafRef.current)
       el.removeEventListener('scroll', handleScroll)
-      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+      stopAutoPlay()
     }
   }, [setWidth])
 
   /* ── Mouse ── */
   const onMouseDown = (e) => {
+    stopAutoPlay()
+    const el = containerRef.current
+    if (!el) return
     isDragging.current = true
     startX.current = e.pageX
-    lastScrollX.current = containerRef.current.scrollLeft
+    lastScrollX.current = el.scrollLeft
     lastClientX.current = e.pageX
     velocity.current = 0
-    containerRef.current.style.cursor = 'grabbing'
-    userActive.current = true
-    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+    el.style.scrollBehavior = 'auto'
+    el.style.cursor = 'grabbing'
   }
 
   const onMouseMove = (e) => {
     if (!isDragging.current) return
+    const el = containerRef.current
+    if (!el) return
     velocity.current = e.pageX - lastClientX.current
     lastClientX.current = e.pageX
     const dx = e.pageX - startX.current
-    const nextScroll = lastScrollX.current - dx
-    containerRef.current.scrollLeft = nextScroll
-    scrollPosRef.current = nextScroll
+    el.scrollLeft = lastScrollX.current - dx
   }
 
   const onMouseUp = () => {
     if (!isDragging.current) return
     isDragging.current = false
-    containerRef.current.style.cursor = 'grab'
-    userActive.current = false
+    const el = containerRef.current
+    if (el) {
+      el.style.cursor = 'grab'
+      // Snap suave al card más cercano al soltar
+      const snappedIndex = Math.round(el.scrollLeft / CARD_STRIDE)
+      el.style.scrollBehavior = 'smooth'
+      el.scrollLeft = snappedIndex * CARD_STRIDE
+    }
+    startAutoPlay()
   }
 
   /* ── Touch ── */
   const onTouchStart = (e) => {
+    stopAutoPlay()
+    const el = containerRef.current
+    if (!el) return
     isDragging.current = true
     startX.current = e.touches[0].pageX
-    lastScrollX.current = containerRef.current.scrollLeft
+    lastScrollX.current = el.scrollLeft
     lastClientX.current = e.touches[0].pageX
-    userActive.current = true
-    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+    el.style.scrollBehavior = 'auto'
   }
 
   const onTouchMove = (e) => {
     if (!isDragging.current) return
+    const el = containerRef.current
+    if (!el) return
     const dx = e.touches[0].pageX - startX.current
-    const nextScroll = lastScrollX.current - dx
-    containerRef.current.scrollLeft = nextScroll
-    scrollPosRef.current = nextScroll
+    el.scrollLeft = lastScrollX.current - dx
   }
 
   const onTouchEnd = () => {
     if (!isDragging.current) return
     isDragging.current = false
-    userActive.current = false
+    const el = containerRef.current
+    if (el) {
+      // Snap suave al card más cercano al soltar
+      const snappedIndex = Math.round(el.scrollLeft / CARD_STRIDE)
+      el.style.scrollBehavior = 'smooth'
+      el.scrollLeft = snappedIndex * CARD_STRIDE
+    }
+    startAutoPlay()
   }
 
   return (
