@@ -345,14 +345,11 @@ function InfiniteCarousel() {
   const isDragging   = useRef(false)
   const startX       = useRef(0)
   const lastScrollX  = useRef(0)
-  const velocity     = useRef(0)
   const lastClientX  = useRef(0)
 
   const autoPlayTimerRef = useRef(null)
 
-  // Triplicar para loop suave
-  const cards = [...REVIEWS, ...REVIEWS, ...REVIEWS]
-  const setWidth = CARD_STRIDE * REVIEWS.length   // ancho de un ciclo
+  const cards = REVIEWS
 
   const startAutoPlay = () => {
     stopAutoPlay()
@@ -362,11 +359,16 @@ function InfiniteCarousel() {
       
       const currentScroll = el.scrollLeft
       const currentIndex = Math.round(currentScroll / CARD_STRIDE)
-      const nextIndex = currentIndex + 1
+      let nextIndex = currentIndex + 1
+
+      // Loop back to the beginning if we reach the end of REVIEWS
+      if (nextIndex >= REVIEWS.length) {
+        nextIndex = 0
+      }
 
       el.style.scrollBehavior = 'smooth'
       el.scrollLeft = nextIndex * CARD_STRIDE
-    }, 3000) // Autoplay goes faster (3s instead of 5s)
+    }, 3000) // Autoplay interval: 3s
   }
 
   const stopAutoPlay = () => {
@@ -382,8 +384,12 @@ function InfiniteCarousel() {
     stopAutoPlay()
     const currentScroll = el.scrollLeft
     const currentIndex = Math.round(currentScroll / CARD_STRIDE)
+    let prevIndex = currentIndex - 1
+    if (prevIndex < 0) {
+      prevIndex = REVIEWS.length - 1
+    }
     el.style.scrollBehavior = 'smooth'
-    el.scrollLeft = (currentIndex - 1) * CARD_STRIDE
+    el.scrollLeft = prevIndex * CARD_STRIDE
     startAutoPlay()
   }
 
@@ -393,47 +399,23 @@ function InfiniteCarousel() {
     stopAutoPlay()
     const currentScroll = el.scrollLeft
     const currentIndex = Math.round(currentScroll / CARD_STRIDE)
+    let nextIndex = currentIndex + 1
+    if (nextIndex >= REVIEWS.length) {
+      nextIndex = 0
+    }
     el.style.scrollBehavior = 'smooth'
-    el.scrollLeft = (currentIndex + 1) * CARD_STRIDE
+    el.scrollLeft = nextIndex * CARD_STRIDE
     startAutoPlay()
   }
 
   useEffect(() => {
-    const el = containerRef.current
-    if (!el) return
-
-    // Empezar en el segundo tercio para poder ir en ambas direcciones
-    el.scrollLeft = setWidth
-
-    const handleScroll = () => {
-      // Loop infinito instantáneo si se sale del ciclo central
-      if (el.scrollLeft >= setWidth * 2) {
-        const prevBehavior = el.style.scrollBehavior
-        el.style.scrollBehavior = 'auto'
-        el.scrollLeft -= setWidth
-        void el.offsetWidth // Forzar reflujo
-        el.style.scrollBehavior = prevBehavior
-      } else if (el.scrollLeft < setWidth) {
-        const prevBehavior = el.style.scrollBehavior
-        el.style.scrollBehavior = 'auto'
-        el.scrollLeft += setWidth
-        void el.offsetWidth // Forzar reflujo
-        el.style.scrollBehavior = prevBehavior
-      }
-    }
-
-    el.addEventListener('scroll', handleScroll, { passive: true })
-    
-    // Iniciar auto-play
     startAutoPlay()
-
     return () => {
-      el.removeEventListener('scroll', handleScroll)
       stopAutoPlay()
     }
-  }, [setWidth])
+  }, [])
 
-  /* ── Mouse ── */
+  /* ── Mouse Dragging (Desktop) ── */
   const onMouseDown = (e) => {
     stopAutoPlay()
     const el = containerRef.current
@@ -442,7 +424,6 @@ function InfiniteCarousel() {
     startX.current = e.pageX
     lastScrollX.current = el.scrollLeft
     lastClientX.current = e.pageX
-    velocity.current = 0
     el.style.scrollBehavior = 'auto'
     el.style.cursor = 'grabbing'
   }
@@ -451,8 +432,6 @@ function InfiniteCarousel() {
     if (!isDragging.current) return
     const el = containerRef.current
     if (!el) return
-    velocity.current = e.pageX - lastClientX.current
-    lastClientX.current = e.pageX
     const dx = e.pageX - startX.current
     el.scrollLeft = lastScrollX.current - dx
   }
@@ -463,20 +442,10 @@ function InfiniteCarousel() {
     const el = containerRef.current
     if (el) {
       el.style.cursor = 'grab'
-      // Snap suave al card más cercano al soltar
       const snappedIndex = Math.round(el.scrollLeft / CARD_STRIDE)
       el.style.scrollBehavior = 'smooth'
       el.scrollLeft = snappedIndex * CARD_STRIDE
     }
-    startAutoPlay()
-  }
-
-  // Pointer interaction helpers to pause autoplay during touch gestures without blocking vertical page scrolling
-  const onPointerDown = () => {
-    stopAutoPlay()
-  }
-
-  const onPointerUp = () => {
     startAutoPlay()
   }
 
@@ -523,10 +492,10 @@ function InfiniteCarousel() {
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
         onMouseLeave={onMouseUp}
-        onPointerDown={onPointerDown}
-        onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
         className="reviews-track"
+        onTouchStart={stopAutoPlay}
+        onTouchEnd={startAutoPlay}
+        onTouchCancel={startAutoPlay}
         style={{
           display: 'flex',
           gap: `${CARD_GAP}px`,
@@ -539,8 +508,8 @@ function InfiniteCarousel() {
         }}
         aria-label="Carrusel de reseñas — arrastra para navegar"
       >
-        {cards.map((review, i) => (
-          <ReviewCard key={`${review.id}-${i}`} review={review} />
+        {cards.map((review) => (
+          <ReviewCard key={review.id} review={review} />
         ))}
       </div>
 
