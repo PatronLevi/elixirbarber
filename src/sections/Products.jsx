@@ -77,8 +77,8 @@ export default function Products() {
       const viewportHeight = window.innerHeight
       
       // We calculate progress starting when the video's bottom edge crosses the bottom of the viewport.
-      // We use a scrollable range of 0.9 * viewportHeight to make the playback progression feel active and responsive.
-      const range = viewportHeight * 0.9
+      // We use a scrollable range of 0.45 * viewportHeight to make the playback progression feel snappy and immediate.
+      const range = viewportHeight * 0.45
       const scrolled = viewportHeight - videoRect.bottom
 
       let progress = scrolled / range
