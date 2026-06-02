@@ -84,8 +84,7 @@ export default function Products() {
       let progress = scrolled / range
       progress = Math.max(0, Math.min(1, progress))
 
-      // Direct assignment for instant hardware-accelerated time response
-      video.currentTime = progress * duration
+      targetTime = progress * duration
       ticking = false
     }
 
@@ -96,6 +95,16 @@ export default function Products() {
       }
     }
 
+    let animationFrameId
+    const lerpLoop = () => {
+      // Smooth lerp interpolation (0.15 is highly responsive yet perfectly smooth)
+      currentTime += (targetTime - currentTime) * 0.15
+      if (Math.abs(targetTime - currentTime) > 0.002) {
+        video.currentTime = currentTime
+      }
+      animationFrameId = requestAnimationFrame(lerpLoop)
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
     
     // Trigger when metadata/canplay is loaded as well to ensure it displays at start
@@ -104,11 +113,13 @@ export default function Products() {
     }
     video.addEventListener('canplay', handleCanPlay)
     updateVideoProgress()
+    lerpLoop()
 
     return () => {
       video.removeEventListener('loadedmetadata', handleLoadedMetadata)
       video.removeEventListener('canplay', handleCanPlay)
       window.removeEventListener('scroll', handleScroll)
+      cancelAnimationFrame(animationFrameId)
     }
   }, [])
 
