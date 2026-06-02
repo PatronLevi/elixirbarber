@@ -62,7 +62,7 @@ function GoldParticles() {
   return (
     <div
       aria-hidden="true"
-      style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden' }}
+      style={{ position: 'absolute', inset: 0, pointerEvents: 'none', overflow: 'hidden', zIndex: 4 }}
     >
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         {particles.map((p) => (
@@ -107,6 +107,38 @@ export default function Hero() {
       }}
       aria-label="Elixir Barber — portada"
     >
+      {/* Video de fondo */}
+      <video
+        src="/hero-bg.mp4"
+        autoPlay
+        loop
+        muted
+        playsInline
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity: 0.3,
+          pointerEvents: 'none',
+          zIndex: 1,
+        }}
+      />
+
+      {/* Capa de oscurecimiento (Overlay) para asegurar legibilidad */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(13, 17, 23, 0.65)',
+          pointerEvents: 'none',
+          zIndex: 2,
+        }}
+      />
+
       {/* Resplandor ambiental de fondo */}
       <div
         aria-hidden="true"
@@ -114,8 +146,9 @@ export default function Hero() {
           position: 'absolute',
           inset: 0,
           background:
-            'radial-gradient(ellipse 65% 60% at 50% 42%, rgba(216,165,17,0.09) 0%, transparent 68%)',
+            'radial-gradient(ellipse 65% 60% at 50% 42%, rgba(216,165,17,0.12) 0%, transparent 68%)',
           pointerEvents: 'none',
+          zIndex: 3,
         }}
       />
 

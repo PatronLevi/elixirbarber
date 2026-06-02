@@ -2,6 +2,7 @@ import './App.css'
 import Navbar from './components/Navbar'
 import Hero from './sections/Hero'
 import Services from './sections/Services'
+import Products from './sections/Products'
 import Reviews from './sections/Reviews'
 import Team from './sections/Team'
 import Location from './sections/Location'
@@ -13,6 +14,7 @@ export default function App() {
       <Navbar />
       <Hero />
       <Services />
+      <Products />
       <Reviews />
       <Team />
       <Location />

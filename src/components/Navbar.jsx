@@ -101,6 +101,7 @@ export default function Navbar() {
 
   const navLinks = [
     { label: 'Servicios',  href: '#servicios' },
+    { label: 'Productos',  href: '#productos' },
     { label: 'Opiniones',  href: '#opiniones' },
     { label: 'Equipo',     href: '#equipo' },
     { label: 'Ubicación',  href: '#ubicacion' },
