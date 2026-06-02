@@ -33,7 +33,6 @@ function HeroLogo() {
             width: '100%',
             height: 'auto',
             display: 'block',
-            filter: 'drop-shadow(0 0 25px rgba(216, 165, 17, 0.55))',
           }}
         />
       </div>

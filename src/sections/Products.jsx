@@ -4,34 +4,26 @@ const BOOKING_URL = 'https://elixirbarber.pedircita.online'
 
 const PRODUCTS = [
   {
-    id: 'beard-oil',
-    name: 'Elixir Premium Beard Oil',
-    description: 'Aceite revitalizante formulado con notas de sándalo y cedro. Hidrata el vello facial y suaviza la piel bajo la barba.',
-    price: '22,00 €',
-    size: '50 ml',
-    badge: 'Best Seller',
+    id: 'de-la-villa-50-llamas',
+    name: '50 Llamas - De la Villa',
+    description: 'Perfume premium de autor con un aroma intenso, duradero y distinguido. Notas exclusivas creadas para marcar presencia.',
+    price: '180,00 €',
+    size: '100 ml',
+    badge: 'Nuevo',
   },
   {
-    id: 'facial-oil',
-    name: 'Elixir Nourishing Facial Oil',
-    description: 'Aceite hidratante facial de absorción rápida. Revitaliza, aporta elasticidad y protege la piel del desgaste diario.',
-    price: '24,00 €',
-    size: '30 ml',
-    badge: 'Cuidado Facial',
+    id: 'five-styling-water',
+    name: 'Styling Water - FIVE',
+    description: 'Spray voluminizador que aporta textura superior, volumen instantáneo y fijación ligera para peinados con movimiento natural.',
+    price: '17,90 €',
+    size: 'Voluminizador',
   },
   {
-    id: 'matte-clay',
-    name: 'Elixir Matte Clay Wax',
-    description: 'Cera de arcilla con fijación fuerte y acabado mate texturizado. Ideal para peinados modernos estructurados sin brillo.',
-    price: '19,50 €',
-    size: '100 g',
-  },
-  {
-    id: 'classic-pomade',
-    name: 'Elixir Classic Pomade',
-    description: 'Pomada al agua tradicional con fijación media y brillo moderado. Perfecta para peinados clásicos y looks pulidos.',
-    price: '18,00 €',
-    size: '100 g',
+    id: 'five-shine-wax',
+    name: 'Shine Wax - FIVE',
+    description: 'Cera fijadora con acabado de brillo moderado. Diseñada para peinados estructurados, aportando fijación fuerte y textura impecable.',
+    price: '16,90 €',
+    size: 'Cera Brillo',
   },
 ]
 
@@ -125,8 +117,9 @@ export default function Products() {
                 borderRadius: 'var(--r-xl)',
                 overflow: 'hidden',
                 boxShadow: '0 12px 40px rgba(0,0,0,0.4)',
-                aspectRatio: '1/1',
+                aspectRatio: '2/3',
                 background: 'var(--beige)',
+                marginBottom: '1.25rem',
               }}
             >
               <img
@@ -142,27 +135,22 @@ export default function Products() {
                 onMouseEnter={(e) => e.target.style.transform = 'scale(1.04)'}
                 onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
               />
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '1.5rem',
-                  left: '1.5rem',
-                  right: '1.5rem',
-                  background: 'rgba(27, 27, 27, 0.85)',
-                  backdropFilter: 'blur(12px)',
-                  padding: '1.25rem',
-                  borderRadius: 'var(--r-md)',
-                  color: 'var(--white)',
-                  border: '1px solid rgba(120, 110, 80, 0.3)',
-                }}
-              >
-                <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', color: 'var(--gold-soft)', marginBottom: '0.25rem' }}>
-                  Edición Limitada Elixir
-                </h4>
-                <p style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.8)', lineHeight: 1.4 }}>
-                  Disponibles exclusivamente para venta física en nuestro salón de Fuengirola. Resérvalos al pedir tu cita.
-                </p>
-              </div>
+            </div>
+            <div
+              style={{
+                background: 'var(--beige)',
+                padding: '1.25rem',
+                borderRadius: 'var(--r-md)',
+                border: '1px solid rgba(120, 110, 80, 0.15)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+              }}
+            >
+              <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', color: 'var(--gold-soft)', marginBottom: '0.25rem' }}>
+                Edición Limitada Elixir
+              </h4>
+              <p style={{ fontSize: '0.75rem', color: 'var(--ink-soft)', lineHeight: 1.4 }}>
+                Disponibles exclusivamente para venta física en nuestro salón de Fuengirola. Resérvalos al pedir tu cita.
+              </p>
             </div>
           </div>
 
