@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
-import { SpeakerHigh, SpeakerSlash } from '@phosphor-icons/react'
+import { useEffect, useRef } from 'react'
 
 export default function Barberia() {
   const sectionRef = useRef(null)
   const videoRef = useRef(null)
-  const [isMuted, setIsMuted] = useState(true)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -23,14 +21,6 @@ export default function Barberia() {
     if (sectionRef.current) observer.observe(sectionRef.current)
     return () => observer.disconnect()
   }, [])
-
-  const toggleMute = () => {
-    if (videoRef.current) {
-      const newState = !videoRef.current.muted
-      videoRef.current.muted = newState
-      setIsMuted(newState)
-    }
-  }
 
   return (
     <section
@@ -196,42 +186,7 @@ export default function Barberia() {
               }}
             />
 
-            {/* Custom Unmute / Mute control button */}
-            <button
-              onClick={toggleMute}
-              style={{
-                position: 'absolute',
-                bottom: '1.25rem',
-                right: '1.25rem',
-                background: 'rgba(27, 27, 27, 0.75)',
-                backdropFilter: 'blur(8px)',
-                border: '1px solid rgba(120, 110, 80, 0.3)',
-                borderRadius: '50%',
-                width: '42px',
-                height: '42px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                color: 'var(--gold-soft)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                transition: 'background-color 200ms ease, transform 200ms ease',
-                zIndex: 10,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(120, 110, 80, 0.85)'
-                e.currentTarget.style.color = '#ffffff'
-                e.currentTarget.style.transform = 'scale(1.05)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(27, 27, 27, 0.75)'
-                e.currentTarget.style.color = 'var(--gold-soft)'
-                e.currentTarget.style.transform = 'scale(1)'
-              }}
-              aria-label={isMuted ? 'Activar sonido del video' : 'Desactivar sonido del video'}
-            >
-              {isMuted ? <SpeakerSlash size={18} weight="bold" /> : <SpeakerHigh size={18} weight="bold" />}
-            </button>
+
 
             {/* Subtle floating branding overlay */}
             <div
