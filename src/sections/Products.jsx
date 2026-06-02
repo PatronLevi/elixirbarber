@@ -214,7 +214,6 @@ export default function Products() {
             >
               <video
                 ref={videoRef}
-                src="/perfume-scroll.mp4#t=0.001"
                 preload="auto"
                 muted
                 playsInline
@@ -226,8 +225,12 @@ export default function Products() {
                   display: 'block',
                   pointerEvents: 'none',
                   backgroundColor: 'var(--beige)', // Blends perfectly with page background color
+                  mixBlendMode: 'screen', // Keeps black background transparent on MP4 fallback
                 }}
-              />
+              >
+                <source src="/perfume-scroll.webm#t=0.001" type="video/webm" />
+                <source src="/perfume-scroll.mp4#t=0.001" type="video/mp4" />
+              </video>
             </div>
 
             {/* Showcase Info Box */}
