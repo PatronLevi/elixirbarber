@@ -23,3 +23,7 @@ dist-ssr
 *.sln
 *.sw?
 .vercel
+
+# Raw assets
+perfume_scroll_gris.mp4
+

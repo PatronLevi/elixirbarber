@@ -225,7 +225,6 @@ export default function Products() {
                   display: 'block',
                   pointerEvents: 'none',
                   backgroundColor: 'var(--beige)', // Blends perfectly with page background color
-                  mixBlendMode: 'screen', // Keeps black background transparent on MP4 fallback
                 }}
               >
                 <source src="/perfume-scroll.webm#t=0.001" type="video/webm" />
