@@ -243,7 +243,7 @@ const REVIEWS = [
 const CARD_WIDTH   = 320  // px
 const CARD_GAP     = 20   // px
 const CARD_STRIDE  = CARD_WIDTH + CARD_GAP
-const SCROLL_SPEED = 0.6  // px / frame  (≈ 36 px/s at 60fps)
+const SCROLL_SPEED = 1.2  // px / frame  (≈ 72 px/s at 60fps)
 
 /* ── Stars ────────────────────────────────────────────────── */
 function Stars({ count = 5 }) {
