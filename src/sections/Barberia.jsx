@@ -162,11 +162,12 @@ export default function Barberia() {
           >
             <video
               ref={videoRef}
-              src="/barberia-video-1.mp4"
+              src="/barberia-video-1.mp4#t=0.001"
               autoPlay
               loop
               muted
               playsInline
+              preload="auto"
               style={{
                 width: '100%',
                 height: '100%',

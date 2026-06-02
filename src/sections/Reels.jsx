@@ -291,7 +291,7 @@ export default function Reels() {
             >
               <video
                 ref={videoRef1}
-                src="/reel-video-1.mp4"
+                src="/reel-video-1.mp4#t=0.001"
                 loop
                 muted
                 autoPlay
@@ -573,7 +573,7 @@ export default function Reels() {
             >
               <video
                 ref={videoRef2}
-                src="/reel-video-2.mp4"
+                src="/reel-video-2.mp4#t=0.001"
                 loop
                 muted
                 autoPlay

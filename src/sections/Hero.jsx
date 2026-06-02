@@ -108,11 +108,12 @@ export default function Hero() {
     >
       {/* Video de fondo */}
       <video
-        src="/hero-bg.mp4"
+        src="/hero-bg.mp4#t=0.001"
         autoPlay
         loop
         muted
         playsInline
+        preload="auto"
         style={{
           position: 'absolute',
           top: 0,
