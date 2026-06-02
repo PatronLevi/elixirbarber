@@ -307,7 +307,20 @@ export default function Reels() {
                 }}
               >
                 {/* Profile row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <a
+                  href="https://www.instagram.com/elixir_barber"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    pointerEvents: 'auto',
+                    textDecoration: 'none',
+                    color: '#ffffff',
+                  }}
+                >
                   <div
                     style={{
                       width: '28px',
@@ -328,7 +341,7 @@ export default function Reels() {
                   <span style={{ fontSize: '0.85rem', fontWeight: 600, textShadow: '0 1px 2px rgba(0,0,0,0.6)' }}>
                     elixir_barber
                   </span>
-                </div>
+                </a>
 
                 {/* Caption / haircut tag */}
                 <p style={{ fontSize: '0.75rem', margin: 0, textShadow: '0 1px 2px rgba(0,0,0,0.6)', lineHeight: 1.4 }}>
@@ -573,7 +586,20 @@ export default function Reels() {
                 }}
               >
                 {/* Profile row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <a
+                  href="https://www.instagram.com/elixir_barber"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    pointerEvents: 'auto',
+                    textDecoration: 'none',
+                    color: '#ffffff',
+                  }}
+                >
                   <div
                     style={{
                       width: '28px',
@@ -594,7 +620,7 @@ export default function Reels() {
                   <span style={{ fontSize: '0.85rem', fontWeight: 600, textShadow: '0 1px 2px rgba(0,0,0,0.6)' }}>
                     elixir_barber
                   </span>
-                </div>
+                </a>
 
                 {/* Caption / haircut tag */}
                 <p style={{ fontSize: '0.75rem', margin: 0, textShadow: '0 1px 2px rgba(0,0,0,0.6)', lineHeight: 1.4 }}>

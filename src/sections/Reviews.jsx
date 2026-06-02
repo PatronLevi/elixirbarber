@@ -350,6 +350,8 @@ function InfiniteCarousel() {
 
   const isAutoScrolling = useRef(false)
   const userActive      = useRef(false)
+  const scrollTimeoutRef = useRef(null)
+  const scrollPosRef    = useRef(0)
 
   // Triplicar para loop suave
   const cards = [...REVIEWS, ...REVIEWS, ...REVIEWS]
@@ -361,11 +363,13 @@ function InfiniteCarousel() {
 
     // Empezar en el segundo tercio para poder ir en ambas direcciones
     el.scrollLeft = setWidth
+    scrollPosRef.current = setWidth
 
     const tick = () => {
       if (!isDragging.current && !userActive.current) {
+        scrollPosRef.current += SCROLL_SPEED
         isAutoScrolling.current = true
-        el.scrollLeft += SCROLL_SPEED
+        el.scrollLeft = Math.round(scrollPosRef.current)
         isAutoScrolling.current = false
       }
       rafRef.current = requestAnimationFrame(tick)
@@ -373,25 +377,29 @@ function InfiniteCarousel() {
 
     rafRef.current = requestAnimationFrame(tick)
 
-    let timeoutId = null
     const handleScroll = () => {
       // Si el scroll ocurre sin que sea auto-scroll, es interacción del usuario
       if (!isAutoScrolling.current) {
+        scrollPosRef.current = el.scrollLeft
         userActive.current = true
-        clearTimeout(timeoutId)
-        timeoutId = setTimeout(() => {
+        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
+        scrollTimeoutRef.current = setTimeout(() => {
           userActive.current = false
-        }, 1500) // reanudar auto-scroll tras 1.5s de inactividad
+        }, 800) // reanudar auto-scroll tras 800ms de inactividad de scroll externo
       }
 
       // Loop infinito instantáneo
       if (el.scrollLeft >= setWidth * 2) {
+        const offset = el.scrollLeft - setWidth * 2
         isAutoScrolling.current = true
-        el.scrollLeft -= setWidth
+        el.scrollLeft = setWidth + offset
+        scrollPosRef.current = setWidth + offset
         isAutoScrolling.current = false
       } else if (el.scrollLeft <= 0) {
+        const offset = el.scrollLeft
         isAutoScrolling.current = true
-        el.scrollLeft += setWidth
+        el.scrollLeft = setWidth + offset
+        scrollPosRef.current = setWidth + offset
         isAutoScrolling.current = false
       }
     }
@@ -401,7 +409,7 @@ function InfiniteCarousel() {
     return () => {
       cancelAnimationFrame(rafRef.current)
       el.removeEventListener('scroll', handleScroll)
-      clearTimeout(timeoutId)
+      if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
     }
   }, [setWidth])
 
@@ -414,6 +422,7 @@ function InfiniteCarousel() {
     velocity.current = 0
     containerRef.current.style.cursor = 'grabbing'
     userActive.current = true
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
   }
 
   const onMouseMove = (e) => {
@@ -421,13 +430,16 @@ function InfiniteCarousel() {
     velocity.current = e.pageX - lastClientX.current
     lastClientX.current = e.pageX
     const dx = e.pageX - startX.current
-    containerRef.current.scrollLeft = lastScrollX.current - dx
+    const nextScroll = lastScrollX.current - dx
+    containerRef.current.scrollLeft = nextScroll
+    scrollPosRef.current = nextScroll
   }
 
   const onMouseUp = () => {
     if (!isDragging.current) return
     isDragging.current = false
     containerRef.current.style.cursor = 'grab'
+    userActive.current = false
   }
 
   /* ── Touch ── */
@@ -437,16 +449,21 @@ function InfiniteCarousel() {
     lastScrollX.current = containerRef.current.scrollLeft
     lastClientX.current = e.touches[0].pageX
     userActive.current = true
+    if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
   }
 
   const onTouchMove = (e) => {
     if (!isDragging.current) return
     const dx = e.touches[0].pageX - startX.current
-    containerRef.current.scrollLeft = lastScrollX.current - dx
+    const nextScroll = lastScrollX.current - dx
+    containerRef.current.scrollLeft = nextScroll
+    scrollPosRef.current = nextScroll
   }
 
   const onTouchEnd = () => {
+    if (!isDragging.current) return
     isDragging.current = false
+    userActive.current = false
   }
 
   return (
