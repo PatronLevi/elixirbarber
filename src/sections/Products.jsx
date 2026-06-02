@@ -73,13 +73,13 @@ export default function Products() {
         return
       }
 
-      const videoRect = video.getBoundingClientRect()
+      const sectionRect = section.getBoundingClientRect()
       const viewportHeight = window.innerHeight
       
-      // We calculate progress starting when the video's bottom edge crosses the bottom of the viewport.
-      // We use a scrollable range of 0.45 * viewportHeight to make the playback progression feel snappy and immediate.
+      // The animation starts exactly when the top of the "Nuestros productos" section reaches the top of the viewport.
+      // We use a scroll range of 0.45 * viewportHeight to keep the animation snappy and responsive.
       const range = viewportHeight * 0.45
-      const scrolled = viewportHeight - videoRect.bottom
+      const scrolled = -sectionRect.top
 
       let progress = scrolled / range
       progress = Math.max(0, Math.min(1, progress))
