@@ -76,27 +76,12 @@ export default function Products() {
       const videoRect = video.getBoundingClientRect()
       const viewportHeight = window.innerHeight
       
-      // We want to calculate progress starting when the video's bottom edge crosses the bottom of the viewport (fully visible).
-      // At that point, scrolled = viewportHeight - videoRect.bottom = 0 -> progress = 0.
-      // It ends when the video's top edge crosses the top of the viewport.
-      // At that point, scrolled = viewportHeight - videoRect.top = viewportHeight -> progress = 1.
-      // So the scrollable distance range is from y = viewportHeight to y = videoRect.height.
-      // Distance = viewportHeight - videoRect.height.
-      const range = viewportHeight - videoRect.height
+      // We calculate progress starting when the video's bottom edge crosses the bottom of the viewport.
+      // We use a scrollable range of 1.8 * viewportHeight to make the playback progression extremely slow and smooth.
+      const range = viewportHeight * 1.8
+      const scrolled = viewportHeight - videoRect.bottom
 
-      let progress
-      if (range > 0) {
-        // scrolled represents how much we have scrolled PAST the fully-visible bottom entrance.
-        const scrolled = viewportHeight - videoRect.bottom
-        progress = scrolled / range
-      } else {
-        // Fallback for viewports shorter than the video card height
-        const rect = section.getBoundingClientRect()
-        const totalScrollable = rect.height + viewportHeight
-        const scrolled = viewportHeight - rect.top
-        progress = scrolled / totalScrollable
-      }
-
+      let progress = scrolled / range
       progress = Math.max(0, Math.min(1, progress))
 
       // Direct assignment for instant hardware-accelerated time response
