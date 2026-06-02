@@ -61,7 +61,7 @@ export default function Products() {
       id="productos"
       ref={sectionRef}
       style={{
-        background: 'var(--white)',
+        background: 'var(--beige-deep)',
         padding: 'clamp(5rem, 10vw, 8rem) 0',
       }}
       aria-label="Productos Elixir Barber"
@@ -124,9 +124,9 @@ export default function Products() {
                 position: 'relative',
                 borderRadius: 'var(--r-xl)',
                 overflow: 'hidden',
-                boxShadow: '0 12px 40px rgba(14,14,14,0.12)',
+                boxShadow: '0 12px 40px rgba(0,0,0,0.4)',
                 aspectRatio: '1/1',
-                background: 'var(--beige-deep)',
+                background: 'var(--beige)',
               }}
             >
               <img
@@ -148,12 +148,12 @@ export default function Products() {
                   bottom: '1.5rem',
                   left: '1.5rem',
                   right: '1.5rem',
-                  background: 'rgba(14, 14, 14, 0.75)',
+                  background: 'rgba(27, 27, 27, 0.85)',
                   backdropFilter: 'blur(12px)',
                   padding: '1.25rem',
                   borderRadius: 'var(--r-md)',
                   color: 'var(--white)',
-                  border: '1px solid rgba(216, 165, 17, 0.3)',
+                  border: '1px solid rgba(120, 110, 80, 0.3)',
                 }}
               >
                 <h4 style={{ fontFamily: 'var(--font-display)', fontSize: '1.15rem', color: 'var(--gold-soft)', marginBottom: '0.25rem' }}>
@@ -184,10 +184,10 @@ export default function Products() {
                 key={product.id}
                 className="reveal"
                 style={{
-                  background: 'var(--beige-deep)',
+                  background: 'var(--beige)',
                   borderRadius: 'var(--r-lg)',
                   padding: '1.5rem',
-                  border: '1px solid rgba(14,14,14,0.04)',
+                  border: '1px solid rgba(120, 110, 80, 0.12)',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '0.75rem',
@@ -197,13 +197,13 @@ export default function Products() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(14,14,14,0.06)'
+                  e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.3)'
                   e.currentTarget.style.borderColor = 'var(--gold-soft)'
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.transform = 'translateY(0)'
                   e.currentTarget.style.boxShadow = 'none'
-                  e.currentTarget.style.borderColor = 'rgba(14,14,14,0.04)'
+                  e.currentTarget.style.borderColor = 'rgba(120, 110, 80, 0.12)'
                 }}
               >
                 {/* Product Badge & Size */}
@@ -214,8 +214,8 @@ export default function Products() {
                   {product.badge && (
                     <span
                       style={{
-                        background: 'rgba(216, 165, 17, 0.12)',
-                        color: 'var(--gold-deep)',
+                        background: 'rgba(120, 110, 80, 0.12)',
+                        color: 'var(--gold-soft)',
                         fontSize: '0.65rem',
                         fontWeight: 600,
                         textTransform: 'uppercase',
@@ -246,7 +246,7 @@ export default function Products() {
                     style={{
                       fontFamily: 'var(--font-body)',
                       fontWeight: 600,
-                      color: 'var(--gold-deep)',
+                      color: 'var(--gold-soft)',
                       fontSize: '1.2rem',
                       whiteSpace: 'nowrap',
                     }}

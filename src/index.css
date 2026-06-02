@@ -2,17 +2,17 @@
 
 /* ─── Brand Tokens ─────────────────────────────────────────── */
 :root {
-  --gold:        #D8A511;
-  --gold-soft:   #E8C766;
-  --gold-deep:   #B5860C;
-  --gold-glow:   rgba(216, 165, 17, 0.35);
-  --ink:         #0E0E0E;
-  --ink-soft:    #4A4A48;
-  --beige:       #F5EFE6;
-  --beige-deep:  #EDE4D3;
-  --white:       #FFFFFF;
-  --night:       #0D1117;
-  --night-2:     #111820;
+  --gold:        #786e50;
+  --gold-soft:   #978e72;
+  --gold-deep:   #5a523a;
+  --gold-glow:   rgba(120, 110, 80, 0.35);
+  --ink:         #ffffff;
+  --ink-soft:    #f2f2f2;
+  --beige:       #1b1b1b;
+  --beige-deep:  #262626;
+  --white:       #ffffff;
+  --night:       #1b1b1b;
+  --night-2:     #262626;
 
   /* radius system: all-soft */
   --r-sm:  6px;
@@ -124,7 +124,7 @@ p {
   transform: scale(1.025);
   box-shadow:
     0 0 0 0 transparent,
-    0 8px 32px rgba(216, 165, 17, 0.5);
+    0 8px 32px rgba(120, 110, 80, 0.5);
 }
 
 .btn-gold:active {

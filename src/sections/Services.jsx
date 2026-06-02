@@ -101,7 +101,7 @@ function ServiceCard({ service, delay = 0 }) {
           position: 'relative',
           overflow: 'hidden',
           transitionDelay: `${delay}ms`,
-          boxShadow: '0 8px 48px rgba(216,165,17,0.18), 0 2px 16px rgba(0,0,0,0.35)',
+          boxShadow: '0 8px 48px rgba(120, 110, 80, 0.18), 0 2px 16px rgba(0, 0, 0, 0.35)',
         }}
         aria-label={`Servicio destacado: ${service.name}`}
       >
@@ -111,7 +111,7 @@ function ServiceCard({ service, delay = 0 }) {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'radial-gradient(ellipse 80% 60% at 50% 20%, rgba(216,165,17,0.1) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse 80% 60% at 50% 20%, rgba(120, 110, 80, 0.1) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}
         />
@@ -122,8 +122,8 @@ function ServiceCard({ service, delay = 0 }) {
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.375rem',
-            background: 'rgba(216,165,17,0.18)',
-            border: '1px solid rgba(216,165,17,0.4)',
+            background: 'rgba(120, 110, 80, 0.18)',
+            border: '1px solid rgba(120, 110, 80, 0.4)',
             borderRadius: '999px',
             padding: '0.3rem 0.875rem',
             fontFamily: 'var(--font-body)',
@@ -154,7 +154,7 @@ function ServiceCard({ service, delay = 0 }) {
           style={{
             fontFamily: 'var(--font-body)',
             fontSize: '0.9rem',
-            color: 'rgba(245,239,230,0.65)',
+            color: 'rgba(242, 242, 242, 0.65)',
             lineHeight: 1.55,
             flex: 1,
           }}
@@ -200,27 +200,27 @@ function ServiceCard({ service, delay = 0 }) {
     <article
       className="reveal service-card"
       style={{
-        background: 'var(--white)',
+        background: 'var(--beige-deep)',
         borderRadius: 'var(--r-lg)',
         padding: 'clamp(1.25rem, 2.5vw, 1.75rem)',
         display: 'flex',
         flexDirection: 'column',
         gap: '0.625rem',
-        border: '1px solid rgba(237, 228, 211, 0.9)',
+        border: '1px solid rgba(120, 110, 80, 0.15)',
         cursor: 'default',
         transition: 'transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease',
         transitionDelay: `${delay}ms`,
-        boxShadow: '0 2px 12px rgba(14,14,14,0.06)',
+        boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-4px)'
-        e.currentTarget.style.boxShadow = '0 8px 32px rgba(216,165,17,0.14), 0 2px 8px rgba(14,14,14,0.08)'
+        e.currentTarget.style.boxShadow = '0 8px 32px rgba(120,110,80,0.18), 0 4px 16px rgba(0,0,0,0.3)'
         e.currentTarget.style.borderColor = 'var(--gold-soft)'
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)'
-        e.currentTarget.style.boxShadow = '0 2px 12px rgba(14,14,14,0.06)'
-        e.currentTarget.style.borderColor = 'rgba(237, 228, 211, 0.9)'
+        e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)'
+        e.currentTarget.style.borderColor = 'rgba(120, 110, 80, 0.15)'
       }}
       aria-label={`Servicio: ${service.name}`}
     >

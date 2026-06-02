@@ -29,7 +29,7 @@ export default function Footer() {
             position: 'absolute',
             inset: 0,
             background:
-              'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(216,165,17,0.08) 0%, transparent 70%)',
+              'radial-gradient(ellipse 60% 60% at 50% 50%, rgba(120,110,80,0.08) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}
         />
@@ -64,7 +64,7 @@ export default function Footer() {
             style={{
               fontFamily: 'var(--font-body)',
               fontSize: '1rem',
-              color: 'rgba(245,239,230,0.6)',
+              color: 'rgba(242,242,242,0.6)',
               maxWidth: '360px',
             }}
           >
@@ -91,9 +91,9 @@ export default function Footer() {
       {/* ── Footer ─────────────────────────────────────────── */}
       <footer
         style={{
-          background: '#080B10',
+          background: '#141414',
           padding: 'clamp(2rem, 4vw, 3rem) 0',
-          borderTop: '1px solid rgba(216,165,17,0.15)',
+          borderTop: '1px solid rgba(120, 110, 80, 0.15)',
         }}
         aria-label="Pie de página Elixir Barber"
       >
@@ -167,7 +167,7 @@ export default function Footer() {
             aria-hidden="true"
             style={{
               height: '1px',
-              background: 'rgba(216,165,17,0.12)',
+              background: 'rgba(120, 110, 80, 0.12)',
             }}
           />
 
@@ -185,7 +185,7 @@ export default function Footer() {
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '0.8125rem',
-                color: 'rgba(245,239,230,0.35)',
+                color: 'rgba(242,242,242,0.35)',
               }}
             >
               © {year} ELIXIR BARBER — Fuengirola, Málaga
@@ -198,12 +198,12 @@ export default function Footer() {
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '0.8125rem',
-                color: 'rgba(245,239,230,0.35)',
+                color: 'rgba(242,242,242,0.35)',
                 textDecoration: 'none',
                 transition: 'color 200ms ease',
               }}
               onMouseEnter={(e) => e.target.style.color = 'var(--gold-soft)'}
-              onMouseLeave={(e) => e.target.style.color = 'rgba(245,239,230,0.35)'}
+              onMouseLeave={(e) => e.target.style.color = 'rgba(242,242,242,0.35)'}
               aria-label="Aviso legal de Elixir Barber"
             >
               Aviso legal

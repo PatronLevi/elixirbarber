@@ -251,7 +251,7 @@ function Stars({ count = 5 }) {
     <div style={{ display: 'flex', gap: '2px' }} aria-label={`${count} de 5 estrellas`}>
       {Array.from({ length: 5 }).map((_, i) => (
         <svg key={i} viewBox="0 0 16 16" width="14" height="14"
-          fill={i < count ? '#D8A511' : '#D9CDB8'} aria-hidden="true">
+          fill={i < count ? 'var(--gold)' : 'rgba(120, 110, 80, 0.25)'} aria-hidden="true">
           <path d="M8 1l1.85 3.75L14 5.61l-3 2.92.71 4.13L8 10.5l-3.71 2.16.71-4.13L2 5.61l4.15-.86z"/>
         </svg>
       ))}
@@ -276,7 +276,7 @@ function ReviewCard({ review }) {
   return (
     <article
       style={{
-        background: '#FFFFFF',
+        background: 'var(--beige-deep)',
         borderRadius: '16px',
         padding: '1.5rem',
         width: `${CARD_WIDTH}px`,
@@ -284,8 +284,8 @@ function ReviewCard({ review }) {
         display: 'flex',
         flexDirection: 'column',
         gap: '0.875rem',
-        boxShadow: '0 2px 16px rgba(14,14,14,0.07)',
-        border: '1px solid rgba(237,228,211,0.8)',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+        border: '1px solid rgba(120,110,80,0.15)',
         position: 'relative',
         overflow: 'hidden',
         userSelect: 'none',
@@ -296,7 +296,7 @@ function ReviewCard({ review }) {
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0,
         height: '3px',
-        background: 'linear-gradient(90deg, transparent, #D8A511, transparent)',
+        background: 'linear-gradient(90deg, transparent, var(--gold), transparent)',
         opacity: 0.55,
       }} aria-hidden="true" />
 
@@ -536,20 +536,20 @@ export default function Reviews() {
               rel="noopener noreferrer"
               style={{
                 display: 'flex', alignItems: 'center', gap: '0.875rem',
-                background: '#FFFFFF',
-                border: '1px solid rgba(237,228,211,0.9)',
+                background: 'var(--beige-deep)',
+                border: '1px solid rgba(120,110,80,0.15)',
                 borderRadius: '14px',
                 padding: '1rem 1.375rem',
                 textDecoration: 'none',
-                boxShadow: '0 2px 12px rgba(14,14,14,0.07)',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
                 transition: 'box-shadow 250ms ease, transform 250ms ease',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 6px 24px rgba(216,165,17,0.18)'
+                e.currentTarget.style.boxShadow = '0 6px 24px rgba(120,110,80,0.18)'
                 e.currentTarget.style.transform = 'translateY(-2px)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 2px 12px rgba(14,14,14,0.07)'
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.3)'
                 e.currentTarget.style.transform = 'translateY(0)'
               }}
               aria-label="Ver todas las reseñas en Google — 5.0 con 108 valoraciones"

@@ -30,10 +30,10 @@ function TeamCard({ member, delay = 0 }) {
     <article
       className="reveal"
       style={{
-        background: 'var(--white)',
+        background: 'var(--beige-deep)',
         borderRadius: 'var(--r-xl)',
         overflow: 'hidden',
-        boxShadow: '0 4px 24px rgba(14,14,14,0.08)',
+        boxShadow: '0 4px 24px rgba(0,0,0,0.25)',
         display: 'flex',
         flexDirection: 'column',
         transition: 'transform 280ms ease, box-shadow 280ms ease',
@@ -42,11 +42,11 @@ function TeamCard({ member, delay = 0 }) {
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-6px)'
-        e.currentTarget.style.boxShadow = '0 16px 48px rgba(14,14,14,0.12), 0 0 0 1.5px var(--gold-soft)'
+        e.currentTarget.style.boxShadow = '0 16px 48px rgba(0,0,0,0.4), 0 0 0 1.5px var(--gold-soft)'
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)'
-        e.currentTarget.style.boxShadow = '0 4px 24px rgba(14,14,14,0.08)'
+        e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.25)'
       }}
       aria-label={`Barbero: ${member.name}`}
     >
@@ -54,7 +54,7 @@ function TeamCard({ member, delay = 0 }) {
       <div
         style={{
           aspectRatio: '3/4',
-          background: 'var(--beige-deep)',
+          background: 'var(--beige)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',

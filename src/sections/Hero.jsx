@@ -66,7 +66,7 @@ function GoldParticles() {
     >
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         {particles.map((p) => (
-          <circle key={p.id} cx={`${p.x}%`} cy={`${p.y}%`} r={p.r} fill="#D8A511" opacity={p.op}>
+          <circle key={p.id} cx={`${p.x}%`} cy={`${p.y}%`} r={p.r} fill="var(--gold)" opacity={p.op}>
             <animate
               attributeName="opacity"
               values={`${p.op};${p.op * 0.12};${p.op}`}
@@ -133,7 +133,7 @@ export default function Hero() {
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'rgba(13, 17, 23, 0.65)',
+          background: 'rgba(27, 27, 27, 0.65)',
           pointerEvents: 'none',
           zIndex: 2,
         }}
@@ -146,7 +146,7 @@ export default function Hero() {
           position: 'absolute',
           inset: 0,
           background:
-            'radial-gradient(ellipse 65% 60% at 50% 42%, rgba(216,165,17,0.12) 0%, transparent 68%)',
+            'radial-gradient(ellipse 65% 60% at 50% 42%, rgba(120,110,80,0.12) 0%, transparent 68%)',
           pointerEvents: 'none',
           zIndex: 3,
         }}
@@ -221,7 +221,7 @@ export default function Hero() {
             fontSize: '0.7rem',
             letterSpacing: '0.14em',
             textTransform: 'uppercase',
-            color: 'rgba(216,165,17,0.42)',
+            color: 'rgba(120, 110, 80, 0.42)',
             marginTop: '-1.25rem',
           }}
         >
@@ -239,7 +239,7 @@ export default function Hero() {
           transform: 'translateX(-50%)',
           width: '1px',
           height: '44px',
-          background: 'linear-gradient(to bottom, transparent, rgba(216,165,17,0.5))',
+          background: 'linear-gradient(to bottom, transparent, rgba(120, 110, 80, 0.5))',
           animation: 'scrollLine 2s ease-in-out infinite',
           zIndex: 8,
         }}

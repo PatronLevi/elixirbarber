@@ -3,8 +3,8 @@ import { List, X } from '@phosphor-icons/react'
 
 /* ── Logo ELIXIR (versión navbar — estático, limpio) ─────────── */
 export function ElixirLogo({ size = 'md', dark = false }) {
-  const textColor = dark ? '#FFFFFF' : '#0E0E0E'
-  const goldColor = '#D8A511'
+  const textColor = 'var(--ink)'
+  const goldColor = 'var(--gold)'
 
   const fontSizes = { sm: '1rem', md: '1.25rem', lg: '1.875rem', xl: '3.25rem' }
   const iconSizes = { sm: 14, md: 17, lg: 25, xl: 52 }
@@ -121,12 +121,12 @@ export default function Navbar() {
           alignItems: 'center',
           transition: 'background 300ms ease, backdrop-filter 300ms ease, box-shadow 300ms ease',
           background: scrolled
-            ? 'rgba(245, 239, 230, 0.88)'
+            ? 'rgba(27, 27, 27, 0.88)'
             : 'transparent',
           backdropFilter: scrolled ? 'blur(20px) saturate(160%)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(160%)' : 'none',
           boxShadow: scrolled
-            ? '0 1px 0 rgba(216, 165, 17, 0.18)'
+            ? '0 1px 0 rgba(120, 110, 80, 0.18)'
             : 'none',
         }}
         aria-label="Navegación principal"
@@ -169,14 +169,14 @@ export default function Navbar() {
                   fontWeight: 500,
                   letterSpacing: '0.08em',
                   textTransform: 'uppercase',
-                  color: scrolled ? 'var(--ink)' : 'rgba(245,239,230,0.9)',
+                  color: scrolled ? 'var(--ink)' : 'rgba(242,242,242,0.9)',
                   textDecoration: 'none',
                   transition: 'color 200ms ease',
                   whiteSpace: 'nowrap',
                 }}
                 onMouseEnter={(e) => e.target.style.color = 'var(--gold)'}
                 onMouseLeave={(e) =>
-                  e.target.style.color = scrolled ? 'var(--ink)' : 'rgba(245,239,230,0.9)'
+                  e.target.style.color = scrolled ? 'var(--ink)' : 'rgba(242,242,242,0.9)'
                 }
               >
                 {link.label}
