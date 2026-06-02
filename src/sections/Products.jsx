@@ -136,7 +136,7 @@ export default function Products() {
               }}
             >
               <img
-                src="/products.png"
+                src="/products.jpg"
                 alt="Colección de productos premium de barbería Elixir"
                 style={{
                   width: '100%',
