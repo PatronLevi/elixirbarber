@@ -43,6 +43,57 @@ export default function Reels() {
     return () => observer.disconnect()
   }, [])
 
+  // Sync muted property to bypass React's muted hydration bug on iOS Safari
+  useEffect(() => {
+    if (videoRef1.current) videoRef1.current.muted = globalMuted
+    if (videoRef2.current) videoRef2.current.muted = globalMuted
+  }, [globalMuted])
+
+  // IntersectionObserver to auto-play/pause videos based on viewport visibility
+  useEffect(() => {
+    const playVideo = (videoRef, setPlaying) => {
+      if (videoRef.current) {
+        videoRef.current.play()
+          .then(() => setPlaying(true))
+          .catch(err => console.log('Autoplay blocked:', err))
+      }
+    }
+
+    const pauseVideo = (videoRef, setPlaying) => {
+      if (videoRef.current) {
+        videoRef.current.pause()
+        setPlaying(false)
+      }
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const isReel1 = entry.target.id === 'reel-1-wrapper'
+          const videoRef = isReel1 ? videoRef1 : videoRef2
+          const setPlaying = isReel1 ? setIsPlaying1 : setIsPlaying2
+
+          if (entry.isIntersecting) {
+            playVideo(videoRef, setPlaying)
+          } else {
+            pauseVideo(videoRef, setPlaying)
+          }
+        })
+      },
+      { threshold: 0.3 } // Play when at least 30% of the card is visible
+    )
+
+    const card1 = document.getElementById('reel-1-wrapper')
+    const card2 = document.getElementById('reel-2-wrapper')
+
+    if (card1) observer.observe(card1)
+    if (card2) observer.observe(card2)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+
   // Handle Play/Pause on hover or tap
   const handleMouseEnter = (videoRef, setPlaying) => {
     if (videoRef.current) {
@@ -214,6 +265,7 @@ export default function Reels() {
         >
           {/* Reel Card 1 */}
           <div
+            id="reel-1-wrapper"
             className="reveal reel-card-wrapper"
             style={{
               position: 'relative',
@@ -241,8 +293,10 @@ export default function Reels() {
                 ref={videoRef1}
                 src="/reel-video-1.mp4"
                 loop
-                muted={globalMuted}
+                muted
+                autoPlay
                 playsInline
+                preload="auto"
                 onTimeUpdate={() => handleTimeUpdate(videoRef1, setProgress1)}
                 style={{
                   width: '100%',
@@ -493,6 +547,7 @@ export default function Reels() {
 
           {/* Reel Card 2 */}
           <div
+            id="reel-2-wrapper"
             className="reveal reel-card-wrapper"
             style={{
               position: 'relative',
@@ -520,8 +575,10 @@ export default function Reels() {
                 ref={videoRef2}
                 src="/reel-video-2.mp4"
                 loop
-                muted={globalMuted}
+                muted
+                autoPlay
                 playsInline
+                preload="auto"
                 onTimeUpdate={() => handleTimeUpdate(videoRef2, setProgress2)}
                 style={{
                   width: '100%',
