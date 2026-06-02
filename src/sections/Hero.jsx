@@ -21,7 +21,7 @@ function HeroLogo() {
           alignItems: 'center',
           justifyContent: 'center',
           width: 'clamp(350px, 60vw, 750px)',
-          aspectRatio: '791 / 200',
+          aspectRatio: '1024 / 341',
           marginInline: 'auto',
         }}
         aria-label="ELIXIR"
