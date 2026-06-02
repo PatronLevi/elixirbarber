@@ -348,6 +348,9 @@ function InfiniteCarousel() {
   const velocity     = useRef(0)
   const lastClientX  = useRef(0)
 
+  const isAutoScrolling = useRef(false)
+  const userActive      = useRef(false)
+
   // Triplicar para loop suave
   const cards = [...REVIEWS, ...REVIEWS, ...REVIEWS]
   const setWidth = CARD_STRIDE * REVIEWS.length   // ancho de un ciclo
@@ -360,23 +363,46 @@ function InfiniteCarousel() {
     el.scrollLeft = setWidth
 
     const tick = () => {
-      if (!isDragging.current) {
+      if (!isDragging.current && !userActive.current) {
+        isAutoScrolling.current = true
         el.scrollLeft += SCROLL_SPEED
-
-        // Loop: cuando llegamos al tercer tercio, volvemos al inicio del segundo
-        if (el.scrollLeft >= setWidth * 2) {
-          el.scrollLeft -= setWidth
-        }
-        // Si el usuario arrastró hacia atrás
-        if (el.scrollLeft <= 0) {
-          el.scrollLeft += setWidth
-        }
+        isAutoScrolling.current = false
       }
       rafRef.current = requestAnimationFrame(tick)
     }
 
     rafRef.current = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(rafRef.current)
+
+    let timeoutId = null
+    const handleScroll = () => {
+      // Si el scroll ocurre sin que sea auto-scroll, es interacción del usuario
+      if (!isAutoScrolling.current) {
+        userActive.current = true
+        clearTimeout(timeoutId)
+        timeoutId = setTimeout(() => {
+          userActive.current = false
+        }, 1500) // reanudar auto-scroll tras 1.5s de inactividad
+      }
+
+      // Loop infinito instantáneo
+      if (el.scrollLeft >= setWidth * 2) {
+        isAutoScrolling.current = true
+        el.scrollLeft -= setWidth
+        isAutoScrolling.current = false
+      } else if (el.scrollLeft <= 0) {
+        isAutoScrolling.current = true
+        el.scrollLeft += setWidth
+        isAutoScrolling.current = false
+      }
+    }
+
+    el.addEventListener('scroll', handleScroll, { passive: true })
+
+    return () => {
+      cancelAnimationFrame(rafRef.current)
+      el.removeEventListener('scroll', handleScroll)
+      clearTimeout(timeoutId)
+    }
   }, [setWidth])
 
   /* ── Mouse ── */
@@ -387,6 +413,7 @@ function InfiniteCarousel() {
     lastClientX.current = e.pageX
     velocity.current = 0
     containerRef.current.style.cursor = 'grabbing'
+    userActive.current = true
   }
 
   const onMouseMove = (e) => {
@@ -409,6 +436,7 @@ function InfiniteCarousel() {
     startX.current = e.touches[0].pageX
     lastScrollX.current = containerRef.current.scrollLeft
     lastClientX.current = e.touches[0].pageX
+    userActive.current = true
   }
 
   const onTouchMove = (e) => {
