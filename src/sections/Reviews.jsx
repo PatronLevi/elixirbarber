@@ -290,6 +290,7 @@ function ReviewCard({ review }) {
         overflow: 'hidden',
         userSelect: 'none',
         WebkitUserSelect: 'none',
+        scrollSnapAlign: 'center',
       }}
     >
       {/* Acento dorado */}
@@ -365,7 +366,7 @@ function InfiniteCarousel() {
 
       el.style.scrollBehavior = 'smooth'
       el.scrollLeft = nextIndex * CARD_STRIDE
-    }, 5000)
+    }, 3000) // Autoplay goes faster (3s instead of 5s)
   }
 
   const stopAutoPlay = () => {
@@ -373,6 +374,28 @@ function InfiniteCarousel() {
       clearInterval(autoPlayTimerRef.current)
       autoPlayTimerRef.current = null
     }
+  }
+
+  const scrollPrev = () => {
+    const el = containerRef.current
+    if (!el) return
+    stopAutoPlay()
+    const currentScroll = el.scrollLeft
+    const currentIndex = Math.round(currentScroll / CARD_STRIDE)
+    el.style.scrollBehavior = 'smooth'
+    el.scrollLeft = (currentIndex - 1) * CARD_STRIDE
+    startAutoPlay()
+  }
+
+  const scrollNext = () => {
+    const el = containerRef.current
+    if (!el) return
+    stopAutoPlay()
+    const currentScroll = el.scrollLeft
+    const currentIndex = Math.round(currentScroll / CARD_STRIDE)
+    el.style.scrollBehavior = 'smooth'
+    el.scrollLeft = (currentIndex + 1) * CARD_STRIDE
+    startAutoPlay()
   }
 
   useEffect(() => {
@@ -448,36 +471,12 @@ function InfiniteCarousel() {
     startAutoPlay()
   }
 
-  /* ── Touch ── */
-  const onTouchStart = (e) => {
+  // Pointer interaction helpers to pause autoplay during touch gestures without blocking vertical page scrolling
+  const onPointerDown = () => {
     stopAutoPlay()
-    const el = containerRef.current
-    if (!el) return
-    isDragging.current = true
-    startX.current = e.touches[0].pageX
-    lastScrollX.current = el.scrollLeft
-    lastClientX.current = e.touches[0].pageX
-    el.style.scrollBehavior = 'auto'
   }
 
-  const onTouchMove = (e) => {
-    if (!isDragging.current) return
-    const el = containerRef.current
-    if (!el) return
-    const dx = e.touches[0].pageX - startX.current
-    el.scrollLeft = lastScrollX.current - dx
-  }
-
-  const onTouchEnd = () => {
-    if (!isDragging.current) return
-    isDragging.current = false
-    const el = containerRef.current
-    if (el) {
-      // Snap suave al card más cercano al soltar
-      const snappedIndex = Math.round(el.scrollLeft / CARD_STRIDE)
-      el.style.scrollBehavior = 'smooth'
-      el.scrollLeft = snappedIndex * CARD_STRIDE
-    }
+  const onPointerUp = () => {
     startAutoPlay()
   }
 
@@ -496,24 +495,47 @@ function InfiniteCarousel() {
         zIndex: 2, pointerEvents: 'none',
       }} />
 
-      {/* Scrollable track */}
+      {/* Floating Gold Navigation Arrows (Desktop) */}
+      <button
+        onClick={scrollPrev}
+        className="carousel-arrow left"
+        aria-label="Reseña anterior"
+      >
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </button>
+
+      <button
+        onClick={scrollNext}
+        className="carousel-arrow right"
+        aria-label="Siguiente reseña"
+      >
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
+
+      {/* Scrollable track with native touch scrolling & CSS snap */}
       <div
         ref={containerRef}
         onMouseDown={onMouseDown}
         onMouseMove={onMouseMove}
         onMouseUp={onMouseUp}
         onMouseLeave={onMouseUp}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
+        onPointerDown={onPointerDown}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        className="reviews-track"
         style={{
           display: 'flex',
           gap: `${CARD_GAP}px`,
-          overflowX: 'scroll',
+          overflowX: 'auto',
           scrollbarWidth: 'none',
           WebkitOverflowScrolling: 'touch',
           cursor: 'grab',
           padding: '1rem 1.5rem 1.5rem',
+          scrollSnapType: 'x mandatory',
         }}
         aria-label="Carrusel de reseñas — arrastra para navegar"
       >
@@ -523,8 +545,48 @@ function InfiniteCarousel() {
       </div>
 
       <style>{`
-        div[aria-label="Carrusel de reseñas — arrastra para navegar"]::-webkit-scrollbar {
+        .reviews-track::-webkit-scrollbar {
           display: none;
+        }
+        .carousel-arrow {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 10;
+          background: rgba(27, 27, 27, 0.7);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(120, 110, 80, 0.3);
+          border-radius: 50%;
+          width: 48px;
+          height: 48px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--gold-soft);
+          cursor: pointer;
+          transition: all 200ms cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        }
+        .carousel-arrow:hover {
+          border-color: var(--gold);
+          color: var(--ink);
+          transform: translateY(-50%) scale(1.08);
+          background: rgba(27, 27, 27, 0.95);
+          box-shadow: 0 6px 20px rgba(120, 110, 80, 0.25);
+        }
+        .carousel-arrow:active {
+          transform: translateY(-50%) scale(0.95);
+        }
+        .carousel-arrow.left {
+          left: 1.5rem;
+        }
+        .carousel-arrow.right {
+          right: 1.5rem;
+        }
+        @media (max-width: 768px) {
+          .carousel-arrow {
+            display: none; /* Ocultar en móviles para navegación táctil nativa */
+          }
         }
       `}</style>
     </div>
