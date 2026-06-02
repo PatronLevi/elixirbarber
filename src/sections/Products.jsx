@@ -68,15 +68,29 @@ export default function Products() {
     let currentTime = 0
 
     const updateVideoProgress = () => {
+      if (video.readyState < 2) { // HAVE_CURRENT_DATA
+        ticking = false
+        return
+      }
+
       const videoRect = video.getBoundingClientRect()
       const viewportHeight = window.innerHeight
+      
+      // We want to calculate progress starting when the video's bottom edge crosses the bottom of the viewport (fully visible).
+      // At that point, scrolled = viewportHeight - videoRect.bottom = 0 -> progress = 0.
+      // It ends when the video's top edge crosses the top of the viewport.
+      // At that point, scrolled = viewportHeight - videoRect.top = viewportHeight -> progress = 1.
+      // So the scrollable distance range is from y = viewportHeight to y = videoRect.height.
+      // Distance = viewportHeight - videoRect.height.
       const range = viewportHeight - videoRect.height
 
       let progress
       if (range > 0) {
+        // scrolled represents how much we have scrolled PAST the fully-visible bottom entrance.
         const scrolled = viewportHeight - videoRect.bottom
         progress = scrolled / range
       } else {
+        // Fallback for viewports shorter than the video card height
         const rect = section.getBoundingClientRect()
         const totalScrollable = rect.height + viewportHeight
         const scrolled = viewportHeight - rect.top
@@ -85,7 +99,8 @@ export default function Products() {
 
       progress = Math.max(0, Math.min(1, progress))
 
-      targetTime = progress * duration
+      // Direct assignment for instant hardware-accelerated time response
+      video.currentTime = progress * duration
       ticking = false
     }
 
@@ -96,23 +111,19 @@ export default function Products() {
       }
     }
 
-    let animationFrameId
-    const lerpLoop = () => {
-      currentTime += (targetTime - currentTime) * 0.08 // smooth lerp multiplier
-      if (Math.abs(targetTime - currentTime) > 0.001) {
-        video.currentTime = currentTime
-      }
-      animationFrameId = requestAnimationFrame(lerpLoop)
-    }
-
     window.addEventListener('scroll', handleScroll, { passive: true })
+    
+    // Trigger when metadata/canplay is loaded as well to ensure it displays at start
+    const handleCanPlay = () => {
+      updateVideoProgress()
+    }
+    video.addEventListener('canplay', handleCanPlay)
     updateVideoProgress()
-    lerpLoop()
 
     return () => {
       video.removeEventListener('loadedmetadata', handleLoadedMetadata)
+      video.removeEventListener('canplay', handleCanPlay)
       window.removeEventListener('scroll', handleScroll)
-      cancelAnimationFrame(animationFrameId)
     }
   }, [])
 
@@ -207,6 +218,7 @@ export default function Products() {
             >
               <video
                 ref={videoRef}
+                src="/perfume-scroll.mp4#t=0.001"
                 preload="auto"
                 muted
                 playsInline
@@ -217,12 +229,9 @@ export default function Products() {
                   objectFit: 'cover',
                   display: 'block',
                   pointerEvents: 'none',
-                  mixBlendMode: 'screen', // Double transparency protection (fallback for MP4)
+                  backgroundColor: 'var(--beige)', // Blends perfectly with page background color
                 }}
-              >
-                <source src="/perfume-scroll.webm#t=0.001" type="video/webm" />
-                <source src="/perfume-scroll.mp4#t=0.001" type="video/mp4" />
-              </video>
+              />
             </div>
 
             {/* Showcase Info Box */}
