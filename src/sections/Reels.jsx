@@ -134,6 +134,40 @@ export default function Reels() {
     }
   }
 
+  // Handle pointer scrubbing for seeking in the video
+  const handlePointerDown = (e, videoRef) => {
+    e.stopPropagation()
+    if (!videoRef.current) return
+    
+    e.currentTarget.setPointerCapture(e.pointerId)
+    e.currentTarget.dataset.scrubbing = 'true'
+    
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const ratio = Math.max(0, Math.min(1, clickX / rect.width))
+    if (videoRef.current.duration) {
+      videoRef.current.currentTime = ratio * videoRef.current.duration
+    }
+  }
+
+  const handlePointerMove = (e, videoRef) => {
+    e.stopPropagation()
+    if (e.currentTarget.dataset.scrubbing !== 'true' || !videoRef.current) return
+    
+    const rect = e.currentTarget.getBoundingClientRect()
+    const clickX = e.clientX - rect.left
+    const ratio = Math.max(0, Math.min(1, clickX / rect.width))
+    if (videoRef.current.duration) {
+      videoRef.current.currentTime = ratio * videoRef.current.duration
+    }
+  }
+
+  const handlePointerUp = (e) => {
+    e.stopPropagation()
+    e.currentTarget.dataset.scrubbing = 'false'
+    e.currentTarget.releasePointerCapture(e.pointerId)
+  }
+
   // Toggle global mute state
   const toggleMute = () => {
     const nextMute = !globalMuted
@@ -499,24 +533,41 @@ export default function Reels() {
 
               {/* Progress Bar Indicator at bottom */}
               <div
+                onPointerDown={(e) => handlePointerDown(e, videoRef1)}
+                onPointerMove={(e) => handlePointerMove(e, videoRef1)}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
+                onClick={(e) => e.stopPropagation()}
                 style={{
                   position: 'absolute',
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  height: '3px',
-                  background: 'rgba(255,255,255,0.2)',
-                  zIndex: 10,
+                  height: '16px',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  cursor: 'pointer',
+                  zIndex: 12,
+                  touchAction: 'none',
                 }}
               >
                 <div
                   style={{
-                    height: '100%',
-                    background: 'var(--gold)',
-                    width: `${progress1}%`,
-                    transition: 'width 100ms linear',
+                    height: '4px',
+                    background: 'rgba(255,255,255,0.25)',
+                    width: '100%',
+                    position: 'relative',
                   }}
-                />
+                >
+                  <div
+                    style={{
+                      height: '100%',
+                      background: 'var(--gold)',
+                      width: `${progress1}%`,
+                      transition: 'width 100ms linear',
+                    }}
+                  />
+                </div>
               </div>
             </div>
 
@@ -781,24 +832,41 @@ export default function Reels() {
 
               {/* Progress Bar Indicator at bottom */}
               <div
+                onPointerDown={(e) => handlePointerDown(e, videoRef2)}
+                onPointerMove={(e) => handlePointerMove(e, videoRef2)}
+                onPointerUp={handlePointerUp}
+                onPointerCancel={handlePointerUp}
+                onClick={(e) => e.stopPropagation()}
                 style={{
                   position: 'absolute',
                   bottom: 0,
                   left: 0,
                   right: 0,
-                  height: '3px',
-                  background: 'rgba(255,255,255,0.2)',
-                  zIndex: 10,
+                  height: '16px',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  cursor: 'pointer',
+                  zIndex: 12,
+                  touchAction: 'none',
                 }}
               >
                 <div
                   style={{
-                    height: '100%',
-                    background: 'var(--gold)',
-                    width: `${progress2}%`,
-                    transition: 'width 100ms linear',
+                    height: '4px',
+                    background: 'rgba(255,255,255,0.25)',
+                    width: '100%',
+                    position: 'relative',
                   }}
-                />
+                >
+                  <div
+                    style={{
+                      height: '100%',
+                      background: 'var(--gold)',
+                      width: `${progress2}%`,
+                      transition: 'width 100ms linear',
+                    }}
+                  />
+                </div>
               </div>
             </div>
 
