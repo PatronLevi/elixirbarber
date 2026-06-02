@@ -50,6 +50,62 @@ const PRODUCTS = [
 
 export default function Products() {
   const sectionRef = useRef(null)
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    const video = videoRef.current
+    const section = sectionRef.current
+    if (!video || !section) return
+
+    let duration = video.duration || 6
+    const handleLoadedMetadata = () => {
+      duration = video.duration
+    }
+    video.addEventListener('loadedmetadata', handleLoadedMetadata)
+
+    let ticking = false
+    let targetTime = 0
+    let currentTime = 0
+
+    const updateVideoProgress = () => {
+      const rect = section.getBoundingClientRect()
+      const viewportHeight = window.innerHeight
+      const totalScrollable = rect.height + viewportHeight
+      const scrolled = viewportHeight - rect.top
+      
+      let progress = scrolled / totalScrollable
+      progress = Math.max(0, Math.min(1, progress))
+
+      targetTime = progress * duration
+      ticking = false
+    }
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(updateVideoProgress)
+        ticking = true
+      }
+    }
+
+    let animationFrameId
+    const lerpLoop = () => {
+      currentTime += (targetTime - currentTime) * 0.08 // smooth lerp multiplier
+      if (Math.abs(targetTime - currentTime) > 0.001) {
+        video.currentTime = currentTime
+      }
+      animationFrameId = requestAnimationFrame(lerpLoop)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    updateVideoProgress()
+    lerpLoop()
+
+    return () => {
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata)
+      window.removeEventListener('scroll', handleScroll)
+      cancelAnimationFrame(animationFrameId)
+    }
+  }, [])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -119,36 +175,109 @@ export default function Products() {
             alignItems: 'start',
           }}
         >
-          {/* Left: Showcase Image */}
+          {/* Left: Showcase Container (Video + Image side by side) */}
           <div
             className="reveal"
             id="product-showcase-container"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.25rem',
+            }}
           >
+            {/* Media Wrapper */}
             <div
               style={{
-                position: 'relative',
-                borderRadius: 'var(--r-xl)',
-                overflow: 'hidden',
-                boxShadow: '0 12px 40px rgba(0,0,0,0.4)',
-                aspectRatio: '2/3',
-                background: 'var(--beige)',
-                marginBottom: '1.25rem',
+                display: 'flex',
+                gap: '1rem',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
               }}
             >
-              <img
-                src="/products.jpg"
-                alt="Colección de productos premium de barbería Elixir"
+              {/* Scroll-Driven Perfume Video Card */}
+              <div
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
-                  transition: 'transform 600ms cubic-bezier(0.16, 1, 0.3, 1)',
+                  position: 'relative',
+                  borderRadius: 'var(--r-xl)',
+                  overflow: 'hidden',
+                  boxShadow: '0 12px 40px rgba(0,0,0,0.4)',
+                  border: '1px solid rgba(120, 110, 80, 0.15)',
+                  aspectRatio: '9 / 16',
+                  background: '#141414',
+                  width: 'calc(50% - 0.5rem)',
+                  minWidth: '140px',
+                  maxWidth: '200px',
                 }}
-                onMouseEnter={(e) => e.target.style.transform = 'scale(1.04)'}
-                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-              />
+              >
+                <video
+                  ref={videoRef}
+                  src="/perfume-scroll.mp4#t=0.001"
+                  preload="auto"
+                  muted
+                  playsInline
+                  webkit-playsinline="true"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    pointerEvents: 'none',
+                  }}
+                />
+                
+                {/* Visual Label */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '0.625rem',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    background: 'rgba(27, 27, 27, 0.85)',
+                    border: '1px solid rgba(120, 110, 80, 0.3)',
+                    borderRadius: '100px',
+                    padding: '0.2rem 0.5rem',
+                    pointerEvents: 'none',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <span style={{ fontSize: '0.55rem', color: 'var(--gold-soft)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>
+                    Scroll Animación
+                  </span>
+                </div>
+              </div>
+
+              {/* Static Showcase Image Card */}
+              <div
+                style={{
+                  position: 'relative',
+                  borderRadius: 'var(--r-xl)',
+                  overflow: 'hidden',
+                  boxShadow: '0 12px 40px rgba(0,0,0,0.4)',
+                  border: '1px solid rgba(120, 110, 80, 0.15)',
+                  aspectRatio: '2 / 3',
+                  background: 'var(--beige)',
+                  width: 'calc(50% - 0.5rem)',
+                  minWidth: '140px',
+                  maxWidth: '200px',
+                }}
+              >
+                <img
+                  src="/products.jpg"
+                  alt="Colección de productos premium de barbería Elixir"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    transition: 'transform 600ms cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                  onMouseEnter={(e) => e.target.style.transform = 'scale(1.04)'}
+                  onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                />
+              </div>
             </div>
+
+            {/* Showcase Info Box */}
             <div
               style={{
                 background: 'var(--beige)',
