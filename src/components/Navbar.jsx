@@ -1,87 +1,22 @@
 import { useState, useEffect } from 'react'
 import { List, X } from '@phosphor-icons/react'
 
-/* ── Logo ELIXIR (versión navbar — estático, limpio) ─────────── */
-export function ElixirLogo({ size = 'md', dark = false }) {
-  const textColor = 'var(--ink)'
-  const goldColor = 'var(--gold)'
-
-  const fontSizes = { sm: '1rem', md: '1.25rem', lg: '1.875rem', xl: '3.25rem' }
-  const iconSizes = { sm: 14, md: 17, lg: 25, xl: 52 }
-  const fs = fontSizes[size] || fontSizes.md
-  const ic = iconSizes[size] || iconSizes.md
+/* ── Logo ELIXIR (versión navbar — imagen de marca) ─────────── */
+export function ElixirLogo({ size = 'md' }) {
+  const heights = { sm: '18px', md: '26px', lg: '36px', xl: '60px' }
+  const h = heights[size] || heights.md
 
   return (
-    <div
+    <img
+      src="/logo.png"
+      alt="ELIXIR BARBER"
       style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 0,
-        lineHeight: 1,
+        height: h,
+        width: 'auto',
+        display: 'block',
         userSelect: 'none',
       }}
-      aria-label="ELIXIR BARBER"
-    >
-      {/* ELI */}
-      <span
-        style={{
-          fontFamily: "'Inter', system-ui, sans-serif",
-          fontWeight: 900,
-          fontSize: fs,
-          color: textColor,
-          letterSpacing: '0.05em',
-          lineHeight: 1,
-        }}
-      >
-        ELI
-      </span>
-
-      {/* Scissors icon — inline SVG, tamaño proporcional */}
-      <span
-        style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: ic,
-          height: ic,
-          flexShrink: 0,
-          marginInline: ic * 0.06,
-        }}
-        aria-hidden="true"
-      >
-        <svg
-          viewBox="0 0 24 24"
-          width={ic}
-          height={ic}
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-        >
-          {/* Blade left: top-right → bottom-left */}
-          <line x1="20" y1="3" x2="4" y2="21" stroke={goldColor} strokeWidth="2.2" strokeLinecap="round"/>
-          {/* Blade right: top-left → bottom-right */}
-          <line x1="4"  y1="3" x2="20" y2="21" stroke={goldColor} strokeWidth="2.2" strokeLinecap="round"/>
-          {/* Ring handles */}
-          <circle cx="7"  cy="6"  r="3" stroke={goldColor} strokeWidth="1.8" fill="none"/>
-          <circle cx="17" cy="6"  r="3" stroke={goldColor} strokeWidth="1.8" fill="none"/>
-          {/* Pivot */}
-          <circle cx="12" cy="12" r="1.8" fill={goldColor}/>
-        </svg>
-      </span>
-
-      {/* IR */}
-      <span
-        style={{
-          fontFamily: "'Inter', system-ui, sans-serif",
-          fontWeight: 900,
-          fontSize: fs,
-          color: textColor,
-          letterSpacing: '0.05em',
-          lineHeight: 1,
-        }}
-      >
-        IR
-      </span>
-    </div>
+    />
   )
 }
 
@@ -148,7 +83,7 @@ export default function Navbar() {
             aria-label="ELIXIR BARBER — inicio"
             style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
           >
-            <ElixirLogo size="md" dark={!scrolled} />
+            <ElixirLogo size="md" />
           </a>
 
           {/* Desktop nav links */}
@@ -260,7 +195,7 @@ export default function Navbar() {
           <X size={28} weight="bold" />
         </button>
 
-        <ElixirLogo size="lg" dark={true} />
+        <ElixirLogo size="lg" />
 
         <nav aria-label="Menú móvil" style={{ display: 'flex', flexDirection: 'column', gap: '2rem', alignItems: 'center' }}>
           {navLinks.map((link) => (
