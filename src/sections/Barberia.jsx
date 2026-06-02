@@ -131,9 +131,9 @@ export default function Barberia() {
                 overflow: 'hidden',
                 boxShadow: '0 12px 40px rgba(0,0,0,0.3)',
                 border: '1px solid rgba(120, 110, 80, 0.15)',
-                aspectRatio: '16 / 10',
+                aspectRatio: '3 / 4',
                 background: 'var(--beige-deep)',
-                maxWidth: '540px',
+                maxWidth: '420px',
               }}
             >
               <img
@@ -143,6 +143,7 @@ export default function Barberia() {
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
+                  objectPosition: 'top',
                   display: 'block',
                   transition: 'transform 700ms ease',
                 }}
