@@ -100,11 +100,13 @@ export default function Navbar() {
   }, [])
 
   const navLinks = [
-    { label: 'Servicios',  href: '#servicios' },
-    { label: 'Productos',  href: '#productos' },
-    { label: 'Opiniones',  href: '#opiniones' },
-    { label: 'Equipo',     href: '#equipo' },
-    { label: 'Ubicación',  href: '#ubicacion' },
+    { label: 'Servicios',    href: '#servicios' },
+    { label: 'La Barbería',  href: '#barberia' },
+    { label: 'Productos',    href: '#productos' },
+    { label: 'Opiniones',    href: '#opiniones' },
+    { label: 'Reels',        href: '#reels' },
+    { label: 'Equipo',       href: '#equipo' },
+    { label: 'Ubicación',    href: '#ubicacion' },
   ]
 
   return (
