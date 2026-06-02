@@ -68,12 +68,21 @@ export default function Products() {
     let currentTime = 0
 
     const updateVideoProgress = () => {
-      const rect = section.getBoundingClientRect()
+      const videoRect = video.getBoundingClientRect()
       const viewportHeight = window.innerHeight
-      const totalScrollable = rect.height + viewportHeight
-      const scrolled = viewportHeight - rect.top
-      
-      let progress = scrolled / totalScrollable
+      const range = viewportHeight - videoRect.height
+
+      let progress
+      if (range > 0) {
+        const scrolled = viewportHeight - videoRect.bottom
+        progress = scrolled / range
+      } else {
+        const rect = section.getBoundingClientRect()
+        const totalScrollable = rect.height + viewportHeight
+        const scrolled = viewportHeight - rect.top
+        progress = scrolled / totalScrollable
+      }
+
       progress = Math.max(0, Math.min(1, progress))
 
       targetTime = progress * duration
@@ -198,7 +207,6 @@ export default function Products() {
             >
               <video
                 ref={videoRef}
-                src="/perfume-scroll.mp4#t=0.001"
                 preload="auto"
                 muted
                 playsInline
@@ -209,9 +217,12 @@ export default function Products() {
                   objectFit: 'cover',
                   display: 'block',
                   pointerEvents: 'none',
-                  mixBlendMode: 'screen', // Filters out the solid black background to make it transparent
+                  mixBlendMode: 'screen', // Double transparency protection (fallback for MP4)
                 }}
-              />
+              >
+                <source src="/perfume-scroll.webm#t=0.001" type="video/webm" />
+                <source src="/perfume-scroll.mp4#t=0.001" type="video/mp4" />
+              </video>
             </div>
 
             {/* Showcase Info Box */}
