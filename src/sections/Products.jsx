@@ -25,6 +25,27 @@ const PRODUCTS = [
     price: '16,90 €',
     size: 'Cera Brillo',
   },
+  {
+    id: 'l3vel3-hair-spray',
+    name: 'Laca Acabado Natural - L3VEL3',
+    description: 'Su fórmula de fijación fuerte mantiene el peinado para un look natural sin dejar residuos ni apelmazar.',
+    price: '9,68 €',
+    size: 'Fijación Fuerte',
+  },
+  {
+    id: 'montale-oud-edition',
+    name: 'Oud Edition - Montale Parfums',
+    description: 'Perfume místico con una combinación de oud sagrado, rosa e incienso. Un aroma lujoso y duradero.',
+    price: '130,00 €',
+    size: '100 ml',
+  },
+  {
+    id: 'wella-mistify-me',
+    name: 'Mistify Me Light - Wella',
+    description: 'Spray de acabado con secado rápido, protección anti-humedad y una fijación ligera para mantener el peinado con movimiento natural.',
+    price: '10,20 €',
+    size: 'Fijación Ligera',
+  },
 ]
 
 export default function Products() {
