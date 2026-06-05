@@ -90,10 +90,9 @@ function GoldParticles() {
 /* ── Hero ─────────────────────────────────────────────────────── */
 export default function Hero() {
   const containerRef = useRef(null)
-  const videoRef = useRef(null)
 
   useEffect(() => {
-    const video = videoRef.current
+    const video = containerRef.current?.querySelector('video')
     if (!video) return
     
     // Ensure muted is set programmatically
@@ -150,25 +149,28 @@ export default function Hero() {
       aria-label="Elixir Barber — portada"
     >
       {/* Video de fondo */}
-      <video
-        ref={videoRef}
-        src="/hero-bg.mp4"
-        autoPlay
-        loop
-        muted
-        defaultMuted
-        playsInline
-        preload="auto"
+      <div
         style={{
           position: 'absolute',
           top: 0,
           left: 0,
           width: '100%',
           height: '100%',
-          objectFit: 'cover',
-          opacity: 0.3,
           pointerEvents: 'none',
           zIndex: 1,
+        }}
+        dangerouslySetInnerHTML={{
+          __html: `
+            <video
+              src="/hero-bg.mp4"
+              autoplay
+              loop
+              muted
+              playsinline
+              preload="auto"
+              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.3; pointer-events: none;"
+            ></video>
+          `
         }}
       />
 

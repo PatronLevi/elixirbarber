@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react'
 
 export default function Barberia() {
   const sectionRef = useRef(null)
-  const videoRef = useRef(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -20,6 +19,39 @@ export default function Barberia() {
     )
     if (sectionRef.current) observer.observe(sectionRef.current)
     return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    const video = sectionRef.current?.querySelector('video')
+    if (!video) return
+    video.muted = true
+
+    const playPromise = video.play()
+    if (playPromise !== undefined) {
+      playPromise.catch((err) => {
+        console.log('Barberia autoplay blocked. Adding fallback listeners.', err)
+        const startVideo = () => {
+          video.muted = true
+          video.play()
+            .then(() => cleanup())
+            .catch((e) => console.log(e))
+        }
+        const cleanup = () => {
+          document.removeEventListener('touchstart', startVideo)
+          document.removeEventListener('click', startVideo)
+          window.removeEventListener('scroll', startVideo)
+        }
+        document.addEventListener('touchstart', startVideo, { passive: true })
+        document.addEventListener('click', startVideo, { passive: true })
+        window.addEventListener('scroll', startVideo, { passive: true })
+        video._autoplayCleanup = cleanup
+      })
+    }
+    return () => {
+      if (video._autoplayCleanup) {
+        video._autoplayCleanup()
+      }
+    }
   }, [])
 
   return (
@@ -160,35 +192,32 @@ export default function Barberia() {
             }}
             className="barberia-right-col"
           >
-            <video
-              ref={videoRef}
-              src="/barberia-video-1.mp4"
-              autoPlay
-              loop
-              muted
-              defaultMuted
-              playsInline
-              preload="auto"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                display: 'block',
-              }}
-            />
-
-            {/* Ambient vignette shading for premium feel */}
+            {/* Raw HTML Video element container */}
             <div
-              aria-hidden="true"
               style={{
                 position: 'absolute',
-                inset: 0,
-                background: 'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.4) 100%)',
-                pointerEvents: 'none',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+              }}
+              dangerouslySetInnerHTML={{
+                __html: `
+                  <video
+                    src="/barberia-video-1.mp4"
+                    autoplay
+                    loop
+                    muted
+                    playsinline
+                    preload="auto"
+                    style="width: 100%; height: 100%; object-fit: cover; display: block;"
+                  ></video>
+                  <div
+                    style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.4) 100%); pointer-events: none;"
+                  ></div>
+                `
               }}
             />
-
-
 
             {/* Subtle floating branding overlay */}
             <div
@@ -206,6 +235,7 @@ export default function Barberia() {
                 color: 'rgba(255,255,255,0.7)',
                 letterSpacing: '0.05em',
                 pointerEvents: 'none',
+                zIndex: 4,
               }}
             >
               SALÓN TOUR
