@@ -351,33 +351,7 @@ export default function Reels() {
                 }}
               />
 
-              {/* Play symbol on hover/tap */}
-              {!isPlaying1 && (
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: '64px',
-                    height: '64px',
-                    borderRadius: '50%',
-                    background: 'rgba(27,27,27,0.7)',
-                    backdropFilter: 'blur(4px)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'var(--gold-soft)',
-                    border: '1px solid rgba(120,110,80,0.3)',
-                    fontSize: '1rem',
-                    pointerEvents: 'none',
-                    animation: 'pulseGlow 2s infinite',
-                  }}
-                >
-                  ▶
-                </div>
-              )}
+
 
               {/* Instagram UI Overlay: Bottom Info */}
               <div
@@ -650,33 +624,7 @@ export default function Reels() {
                 }}
               />
 
-              {/* Play symbol on hover/tap */}
-              {!isPlaying2 && (
-                <div
-                  aria-hidden="true"
-                  style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: '64px',
-                    height: '64px',
-                    borderRadius: '50%',
-                    background: 'rgba(27,27,27,0.7)',
-                    backdropFilter: 'blur(4px)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: 'var(--gold-soft)',
-                    border: '1px solid rgba(120,110,80,0.3)',
-                    fontSize: '1rem',
-                    pointerEvents: 'none',
-                    animation: 'pulseGlow 2s infinite',
-                  }}
-                >
-                  ▶
-                </div>
-              )}
+
 
               {/* Instagram UI Overlay: Bottom Info */}
               <div
