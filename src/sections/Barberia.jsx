@@ -1,9 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 export default function Barberia() {
   const sectionRef = useRef(null)
   const videoRef = useRef(null)
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -21,71 +20,6 @@ export default function Barberia() {
     )
     if (sectionRef.current) observer.observe(sectionRef.current)
     return () => observer.disconnect()
-  }, [])
-
-  useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
-    video.muted = true
-
-    const handlePlaying = () => {
-      setIsVideoPlaying(true)
-    }
-
-    const handlePause = () => {
-      setIsVideoPlaying(false)
-    }
-
-    video.addEventListener('playing', handlePlaying)
-    video.addEventListener('pause', handlePause)
-
-    // Check if video is already playing
-    if (video.currentTime > 0 && !video.paused && !video.ended && video.readyState > 2) {
-      setIsVideoPlaying(true)
-    }
-
-    // Try programmatically
-    const playPromise = video.play()
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          setIsVideoPlaying(true)
-        })
-        .catch((err) => {
-          console.log('Barberia video autoplay blocked:', err)
-          setIsVideoPlaying(false)
-
-          const startVideo = () => {
-            video.muted = true
-            video.play()
-              .then(() => {
-                setIsVideoPlaying(true)
-                cleanupListeners()
-              })
-              .catch((e) => console.log('Barberia interactive play failed:', e))
-          }
-
-          const cleanupListeners = () => {
-            document.removeEventListener('touchstart', startVideo)
-            document.removeEventListener('click', startVideo)
-            window.removeEventListener('scroll', startVideo)
-          }
-
-          document.addEventListener('touchstart', startVideo, { passive: true })
-          document.addEventListener('click', startVideo, { passive: true })
-          window.addEventListener('scroll', startVideo, { passive: true })
-
-          video._autoplayCleanup = cleanupListeners
-        })
-    }
-
-    return () => {
-      video.removeEventListener('playing', handlePlaying)
-      video.removeEventListener('pause', handlePause)
-      if (video._autoplayCleanup) {
-        video._autoplayCleanup()
-      }
-    }
   }, [])
 
   return (
@@ -226,40 +160,20 @@ export default function Barberia() {
             }}
             className="barberia-right-col"
           >
-            {/* Fallback image */}
-            <img
-              src="/barberia-video-poster.jpg"
-              alt=""
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                zIndex: 1,
-              }}
-            />
-
             <video
               ref={videoRef}
               src="/barberia-video-1.mp4"
               autoPlay
               loop
               muted
+              defaultMuted
               playsInline
               preload="auto"
               style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
-                opacity: isVideoPlaying ? 1 : 0,
-                transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-                zIndex: 2,
+                display: 'block',
               }}
             />
 
@@ -271,7 +185,6 @@ export default function Barberia() {
                 inset: 0,
                 background: 'linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.4) 100%)',
                 pointerEvents: 'none',
-                zIndex: 3,
               }}
             />
 

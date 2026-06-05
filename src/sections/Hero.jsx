@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect } from 'react'
 
 const BOOKING_URL = 'https://elixirbarber.pedircita.online'
 
@@ -91,71 +91,43 @@ function GoldParticles() {
 export default function Hero() {
   const containerRef = useRef(null)
   const videoRef = useRef(null)
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
-
-    // Ensure it is muted programmatically right away
+    
+    // Ensure muted is set programmatically
     video.muted = true
 
-    const handlePlaying = () => {
-      setIsVideoPlaying(true)
-    }
-
-    const handlePause = () => {
-      setIsVideoPlaying(false)
-    }
-
-    video.addEventListener('playing', handlePlaying)
-    video.addEventListener('pause', handlePause)
-
-    // Check if video is already playing
-    if (video.currentTime > 0 && !video.paused && !video.ended && video.readyState > 2) {
-      setIsVideoPlaying(true)
-    }
-
-    // Try programmatically
     const playPromise = video.play()
     if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          setIsVideoPlaying(true)
-        })
-        .catch((err) => {
-          console.log('Autoplay blocked initially, setting up fallback listeners:', err)
-          setIsVideoPlaying(false)
+      playPromise.catch((err) => {
+        console.log('Autoplay blocked. Adding listener for user interaction.', err)
+        
+        const startVideo = () => {
+          video.muted = true
+          video.play()
+            .then(() => {
+              cleanupListeners()
+            })
+            .catch((e) => console.log('Interactive play failed:', e))
+        }
 
-          const startVideo = () => {
-            video.muted = true
-            video.play()
-              .then(() => {
-                setIsVideoPlaying(true)
-                cleanupListeners()
-              })
-              .catch((e) => {
-                console.log('Interactive play failed:', e)
-              })
-          }
+        const cleanupListeners = () => {
+          document.removeEventListener('touchstart', startVideo)
+          document.removeEventListener('click', startVideo)
+          window.removeEventListener('scroll', startVideo)
+        }
 
-          const cleanupListeners = () => {
-            document.removeEventListener('touchstart', startVideo)
-            document.removeEventListener('click', startVideo)
-            window.removeEventListener('scroll', startVideo)
-          }
+        document.addEventListener('touchstart', startVideo, { passive: true })
+        document.addEventListener('click', startVideo, { passive: true })
+        window.addEventListener('scroll', startVideo, { passive: true })
 
-          document.addEventListener('touchstart', startVideo, { passive: true })
-          document.addEventListener('click', startVideo, { passive: true })
-          window.addEventListener('scroll', startVideo, { passive: true })
-
-          video._autoplayCleanup = cleanupListeners
-        })
+        video._autoplayCleanup = cleanupListeners
+      })
     }
 
     return () => {
-      video.removeEventListener('playing', handlePlaying)
-      video.removeEventListener('pause', handlePause)
       if (video._autoplayCleanup) {
         video._autoplayCleanup()
       }
@@ -177,23 +149,6 @@ export default function Hero() {
       }}
       aria-label="Elixir Barber — portada"
     >
-      {/* Fallback Poster Image */}
-      <img
-        src="/hero-poster.jpg"
-        alt=""
-        aria-hidden="true"
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          opacity: 0.3,
-          zIndex: 1,
-        }}
-      />
-
       {/* Video de fondo */}
       <video
         ref={videoRef}
@@ -201,6 +156,7 @@ export default function Hero() {
         autoPlay
         loop
         muted
+        defaultMuted
         playsInline
         preload="auto"
         style={{
@@ -210,10 +166,9 @@ export default function Hero() {
           width: '100%',
           height: '100%',
           objectFit: 'cover',
-          opacity: isVideoPlaying ? 0.3 : 0,
-          transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          opacity: 0.3,
           pointerEvents: 'none',
-          zIndex: 2,
+          zIndex: 1,
         }}
       />
 
@@ -225,7 +180,7 @@ export default function Hero() {
           inset: 0,
           background: 'rgba(27, 27, 27, 0.65)',
           pointerEvents: 'none',
-          zIndex: 3,
+          zIndex: 2,
         }}
       />
 
