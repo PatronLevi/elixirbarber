@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 
 const BOOKING_URL = 'https://elixirbarber.pedircita.online'
 
@@ -90,6 +90,17 @@ function GoldParticles() {
 /* ── Hero ─────────────────────────────────────────────────────── */
 export default function Hero() {
   const containerRef = useRef(null)
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+    video.muted = true
+    // Programmatic play trigger to bypass browser autoplay restrictions
+    video.play().catch((err) => {
+      console.log('Hero background video autoplay blocked or failed:', err)
+    })
+  }, [])
 
   return (
     <section
@@ -108,6 +119,7 @@ export default function Hero() {
     >
       {/* Video de fondo */}
       <video
+        ref={videoRef}
         src="/hero-bg.mp4#t=0.001"
         autoPlay
         loop
