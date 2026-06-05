@@ -96,10 +96,42 @@ export default function Hero() {
     const video = videoRef.current
     if (!video) return
     video.muted = true
-    // Programmatic play trigger to bypass browser autoplay restrictions
-    video.play().catch((err) => {
-      console.log('Hero background video autoplay blocked or failed:', err)
-    })
+
+    // 1. Try to autoplay programmatically
+    const playPromise = video.play()
+    
+    if (playPromise !== undefined) {
+      playPromise.catch((err) => {
+        console.log('Autoplay blocked. Adding listener for user interaction.', err)
+        
+        // 2. Fallback: play on first user interaction if blocked
+        const startVideo = () => {
+          video.play()
+            .then(() => {
+              cleanupListeners()
+            })
+            .catch((e) => console.log('Interactive play failed:', e))
+        }
+
+        const cleanupListeners = () => {
+          document.removeEventListener('touchstart', startVideo)
+          document.removeEventListener('click', startVideo)
+          window.removeEventListener('scroll', startVideo)
+        }
+
+        document.addEventListener('touchstart', startVideo, { passive: true })
+        document.addEventListener('click', startVideo, { passive: true })
+        window.addEventListener('scroll', startVideo, { passive: true })
+
+        video._autoplayCleanup = cleanupListeners
+      })
+    }
+
+    return () => {
+      if (video._autoplayCleanup) {
+        video._autoplayCleanup()
+      }
+    }
   }, [])
 
   return (
